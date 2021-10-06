@@ -1,10 +1,12 @@
 # Weekly report for Week 3: 05/10 -- 12/10
-## These are the things I read this week.
+## Weekly Reading
 - First item: 
 - Second item: 
-## These are the things I implemented this week.
+## Weekly Implementation
 - 
 - 
-## This is what I plan to do next week.
+## Daily Record
+- Day 1: Learn Elm; Start coding for Tangram
+## Next Week Plan
 - [ ] 
 - [ ] 
