@@ -6,5 +6,5 @@
 - 
 - 
 ## This is what I plan to do next week.
-- [] 
-- [] 
+- [ ] 
+- [ ] 
