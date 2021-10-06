@@ -6,7 +6,8 @@
 - 
 - 
 ## Daily Record
-- Day 1: Learn Elm; Start coding for Tangram
+- Day 1: Learn Elm;
+- Day 2: Start coding for Tangram
 ## Next Week Plan
 - [ ] 
 - [ ] 
