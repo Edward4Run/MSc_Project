@@ -1,132 +1,95 @@
-module Main exposing (..)
-
--- Press buttons to increment and decrement a counter.
+module Main exposing (main)
 
 import Browser
-import Browser.Events
-import Html exposing (Html)
+import Html exposing (Html, div, button)
+import Html.Events exposing (onClick)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
-import Time
-import Random
+import Svg.Events exposing (onClick)
+import Svg.Button exposing (Button, Colors, Content(..))
 import Grid exposing (..)
-import Util exposing (..)
-import NonEmptyList as NEL exposing (NonEmptyList)
-import Html.Events.Extra.Pointer as Pointer
-
 
 -- MAIN
-
-
-main = Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
+main = 
+    Browser.element 
+        { init = init
+        , update = update
+        , subscriptions = subscriptions
+        , view = view
+        }
 
 -- CONSTANTS
 gridSize = Size 40 20
 cellSize = Size 20 20
-tickFrequency = 100
-initialSnakeLength = 20
 
 -- MODEL
-type State = Active | Inactive
-
-type alias Model =
-  { state : State
-  , gameTicks : Int
-  , direction : Direction
-  , snake : NonEmptyList Position
-  , prize : (Maybe Position)
-  , score : Int
-  , highScore : Int
-  }
-
-initGame : State -> Int -> (Model, Cmd Msg)
-initGame initialState highScore =
-  let
-    head = computeGridCenter gridSize
-    initSnake = NonEmptyList head (List.repeat (initialSnakeLength - 1) head)
-  in
-  ( { state = initialState
-    , gameTicks = 0
-    , direction = Up
-    , snake = initSnake
-    , prize = Nothing
-    , score = 0
-    , highScore = highScore
-    }
-  , if (initialState == Active) then placePrize initSnake else Cmd.none
-  )
+type Model
+  = Failure
+  | Loading
+  | Success String
 
 init : () -> (Model, Cmd Msg)
-init _ = initGame Inactive 0
+init _ =
+  ( Loading
+  , Cmd.none
+  )
+
+type Operation
+    = Increment
+    | Decrement
 
 -- UPDATE
-type Msg = Tick Time.Posix | PlacePrize (Maybe Position) | PointerDownAt ( Float, Float )
+type Msg 
+    = Play
+    | Options
+    | Collection
+    | Exit
+    | ButtonMsg Svg.Button.Msg Operation
 
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
-  if (model.state == Active) then
-    case msg of
-      PointerDownAt offsetPos ->
-        ( { model | direction = pointerOffsetToDirection offsetPos model.direction model.snake.head }
-        , Cmd.none
-        )
-
-      Tick time ->
+  case msg of
+    Play ->
+      ( model
+      , Cmd.none
+      )
+    Options ->
+      ( model
+      , Cmd.none
+      )
+    Collection ->
+      ( model
+      , Cmd.none
+      )
+    Exit ->
+      ( model
+      , Cmd.none
+      )
+    ButtonMsg m operation ->
         let
-          nextHead = adjustPosition model.snake.head model.direction
-          atePrize = (Just nextHead) == model.prize
-          nextScore = if atePrize then model.score + 1 else model.score
-          nextTail = model.snake.head :: if atePrize then model.snake.tail else stripLast model.snake.tail
-          nextSnake = NonEmptyList nextHead nextTail
-          nextState = if (isLegalState nextSnake) then Active else Inactive
-          nextModel =
-            { model
-              | state = nextState
-              , snake = nextSnake
-              , score = nextScore
-              , highScore = Basics.max nextScore model.highScore
-              , gameTicks = if (nextState == Active) then model.gameTicks + 1 else (-1000 // tickFrequency) // 2
-            }
+            button =
+               getButton operation model
+
+            ( isClick, btn, _ ) =
+                Svg.Button.update (\bm -> ButtonMsg bm operation)
+                    m
+                    button
         in
-          ( nextModel , if atePrize then placePrize nextSnake else Cmd.none )
+        operate isClick operation mdl
 
-      PlacePrize  pos ->
-        ( { model | prize = pos }, Cmd.none )
+playContent : Svg.Button.Content
+playContent =
+    Svg.Button.TextContent "PLAY"
+    
+incrementButton : Svg.Button.Button ()
+incrementButton =
+    Svg.Button.simpleButton (100, 50) ()
 
-    else
-      case msg of 
-        PointerDownAt _ -> if (model.gameTicks >= 0) then initGame Active model.highScore else ( model, Cmd.none )
-        Tick time ->
-          ({ model | gameTicks = model.gameTicks + 1}, Cmd.none )
-        _ -> ( model, Cmd.none )
-
-isLegalState : NonEmptyList Position -> Bool
-isLegalState snake = (isInGrid gridSize snake.head) && not (List.member snake.head snake.tail)
-
-placePrize : NonEmptyList Position -> Cmd Msg
-placePrize snake =
-  let
-    allPoints = computePointsInGrid gridSize
-    snakePoints = NEL.toList snake
-    validPoints = List.filter (\p -> not (List.member p snakePoints)) allPoints
-  in
-  Random.generate PlacePrize (Random.map (\i -> List.head (List.drop i validPoints)) (Random.int 0 (List.length validPoints - 1)))
-
-pointerOffsetToDirection : ( Float, Float ) -> Direction -> Position -> Direction
-pointerOffsetToDirection eventOffset currentDirection snakeHead =
-  let
-    (eventX, eventY) = eventOffset
-    dx = eventX - ((toFloat snakeHead.x + 0.5) * toFloat cellSize.width)
-    dy = eventY - ((toFloat snakeHead.y + 0.5) * toFloat cellSize.height)
-  in
-  if (currentDirection == Up || currentDirection == Down) then
-    if (dx < 0) then Left else Right
-  else
-    if (dy < 0) then Up else Down
-
--- SUBSCRIPTIONS
+-- SUB
 subscriptions : Model -> Sub Msg
-subscriptions model = Time.every tickFrequency Tick
+subscriptions model =
+  Sub.none
+
 
 -- VIEW
 view : Model -> Html Msg
@@ -134,23 +97,18 @@ view model =
   svg [ width "100%"
       , height "auto"
       , viewBox ("0 0 " ++ String.fromInt (gridSize.width * cellSize.width) ++ " " ++ String.fromInt (gridSize.height * cellSize.height))
-      , Pointer.onDown (\event -> PointerDownAt event.pointer.offsetPos)
-      , Svg.Attributes.style "touch-action: none"
       ]
-      (  rect [ width (String.fromInt (gridSize.width * cellSize.width)), height (String.fromInt (gridSize.height * cellSize.height))] []
-      :: (maybeToList model.prize |> List.map (\pos -> renderCircle "green" pos))
-      ++ List.map (renderCircle "red") model.snake.tail
-      ++ [ renderCircle "purple" model.snake.head ]
-      ++ [ text_ [ x "5", y "20", Svg.Attributes.style "fill: white"] [ text ("Score: " ++ (String.fromInt model.score))]
-         , text_ [ x (String.fromInt ((gridSize.width * cellSize.width) - 5)), y "20", Svg.Attributes.style "fill: white; text-anchor: end"] [ text ("High Score: " ++ (String.fromInt model.highScore))]
-         ]
-      ++ if (model.state == Inactive && model.gameTicks >= 0) then [ text_ [ x "50%", y "50%", Svg.Attributes.style "dominant-baseline:middle; text-anchor:middle; fill: white; font-size: large"] [ text "Click to begin..." ] ] else []
-      )
-
-renderCircle : String -> Position -> Html Msg
-renderCircle color pos =
-  circle [ cx (String.fromInt ((pos.x * cellSize.width) + (cellSize.width // 2)))
-         , cy (String.fromInt ((pos.y * cellSize.height) + (cellSize.height // 2)))
-         , r (String.fromInt (cellSize.height // 2))
-         , fill color
-         ] []
+      [ image
+        [ x "300"
+        , y "50"
+        , width "200"
+        , height "300"
+        ]
+        []
+      , svg.button.render
+          (x, y)
+          playContent
+          (\m -> ButtonMsg m Increment)
+          incrementButton
+      ]
+  
