@@ -1,114 +1,68 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, button)
+import Html exposing (Html, button, div, img, text)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import Svg exposing (..)
-import Svg.Attributes exposing (..)
-import Svg.Events exposing (onClick)
-import Svg.Button exposing (Button, Colors, Content(..))
-import Grid exposing (..)
+import Page.Home exposing (Model)
 
 -- MAIN
 main = 
-    Browser.element 
-        { init = init
-        , update = update
-        , subscriptions = subscriptions
-        , view = view
-        }
-
--- CONSTANTS
-gridSize = Size 40 20
-cellSize = Size 20 20
+    Browser.sandbox
+      { init = init
+      , view = view
+      , update = update
+      }
 
 -- MODEL
-type Model
-  = Failure
-  | Loading
-  | Success String
 
-init : () -> (Model, Cmd Msg)
-init _ =
-  ( Loading
-  , Cmd.none
-  )
+type alias Model = Int
 
-type Operation
+
+-- INIT
+
+init : Model
+init =
+  0
+
+
+-- UPDATE
+
+type Msg
     = Increment
     | Decrement
 
--- UPDATE
-type Msg 
-    = Play
-    | Options
-    | Collection
-    | Exit
-    | ButtonMsg Svg.Button.Msg Operation
-
-update : Msg -> Model -> ( Model, Cmd msg )
+update : Msg -> Model -> Model
 update msg model =
   case msg of
-    Play ->
-      ( model
-      , Cmd.none
-      )
-    Options ->
-      ( model
-      , Cmd.none
-      )
-    Collection ->
-      ( model
-      , Cmd.none
-      )
-    Exit ->
-      ( model
-      , Cmd.none
-      )
-    ButtonMsg m operation ->
-        let
-            button =
-               getButton operation model
+    Increment ->
+      model + 1
 
-            ( isClick, btn, _ ) =
-                Svg.Button.update (\bm -> ButtonMsg bm operation)
-                    m
-                    button
-        in
-        operate isClick operation mdl
-
-playContent : Svg.Button.Content
-playContent =
-    Svg.Button.TextContent "PLAY"
-    
-incrementButton : Svg.Button.Button ()
-incrementButton =
-    Svg.Button.simpleButton (100, 50) ()
-
--- SUB
-subscriptions : Model -> Sub Msg
-subscriptions model =
-  Sub.none
+    Decrement ->
+      model - 1
 
 
 -- VIEW
+
 view : Model -> Html Msg
 view model =
-  svg [ width "100%"
-      , height "auto"
-      , viewBox ("0 0 " ++ String.fromInt (gridSize.width * cellSize.width) ++ " " ++ String.fromInt (gridSize.height * cellSize.height))
-      ]
-      [ image
-        [ x "300"
-        , y "50"
-        , width "200"
-        , height "300"
-        ]
-        []
-      , svg.button.render
-          (x, y)
-          playContent
-          (\m -> ButtonMsg m Increment)
-          incrementButton
-      ]
-  
+  div [ class "container" ]
+    [ div []
+      []
+    , div [ class ""]
+      [ button [ class "play-button", onClick Decrement ]
+    [ text "PLAY" ] ]
+    , div []
+      [ button [ class "options-button", onClick Decrement ]
+    [ text "OPTIONS" ]]
+    , div []
+      [ button [ class "collection-button", onClick Increment ]
+    [ text "COLLECTION" ]]
+    , div []
+      [ button [ class "exit-button", onClick Decrement ]
+    [ text "EXIT" ]]
+    
+    
+    
+    
+    ]
