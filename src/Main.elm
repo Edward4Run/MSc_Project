@@ -1,68 +1,120 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
-import Page.Home exposing (Model)
+import Html.Styled exposing (Html, a, div, h1, span, text)
+import Html.Styled.Attributes as HA exposing (css, href)
+import Html.Styled.Events exposing (onClick)
+import Css exposing (..)
+import View.Colors as Colors
+import Style
+import Html exposing (option)
 
 -- MAIN
-main = 
-    Browser.sandbox
-      { init = init
-      , view = view
-      , update = update
-      }
+main =
+    Browser.element
+        { init = init
+        , view = view >> Html.Styled.toUnstyled
+        , update = update
+        , subscriptions = always Sub.none
+        }
 
 -- MODEL
-
-type alias Model = Int
+type alias Model =
+  { level: Int 
+  }
 
 
 -- INIT
 
-init : Model
-init =
-  0
+init : () -> ( Model, Cmd Msg )
+init _ = ( { level = 1 }, Cmd.none )
 
 
 -- UPDATE
 
 type Msg
-    = Increment
-    | Decrement
+    = Play
+    | Options
+    | Collection
+    | Exit
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
-    Increment ->
-      model + 1
+    Play ->
+      ( { model | level = model.level + 1 }, Cmd.none )
 
-    Decrement ->
-      model - 1
+    Options ->
+      ( { model | level = model.level + 1 }, Cmd.none )
+
+    Collection ->
+      ( { model | level = model.level + 1 }, Cmd.none )
+
+    Exit ->
+      ( { model | level = model.level + 1 }, Cmd.none )
+
 
 
 -- VIEW
+button : Msg -> String -> Html Msg
+button clickMsg content =
+    span
+        [ css
+            [ fontWeight bold
+            , fontSize (px 24)
+            , Style.sansFont
+            , color Colors.text
+            , cursor pointer
+            ]
+        , onClick clickMsg
+        ]
+        [ text content ]
+
+lightButton : Msg -> String -> Html Msg
+lightButton clickMsg content =
+    span
+        [ css
+            [ fontWeight bold
+            , fontSize (px 24)
+            , Style.sansFont
+            , color Colors.white
+            , cursor pointer
+            ]
+        , onClick clickMsg
+        ]
+        [ text content ]
+
+buttons : List (Html Msg) -> Html Msg
+buttons =
+    div
+        [ css
+            [ position absolute
+            , bottom (px 500)
+            , left (px 0)
+            , right (px 0)
+            , textAlign center
+            ]
+        ]
+
+spanMarginRight : Html Msg -> Html Msg
+spanMarginRight child =
+    span [ css [ marginRight (px 20) ] ] [ child ]
 
 view : Model -> Html Msg
 view model =
-  div [ class "container" ]
+  div [ css
+            [ backgroundColor Colors.gray
+            , height (pct 100)
+            , overflow auto
+            , displayFlex
+            , flexDirection column
+            , alignItems center
+            ]
+        ]
     [ div []
-      []
-    , div [ class ""]
-      [ button [ class "play-button", onClick Decrement ]
-    [ text "PLAY" ] ]
-    , div []
-      [ button [ class "options-button", onClick Decrement ]
-    [ text "OPTIONS" ]]
-    , div []
-      [ button [ class "collection-button", onClick Increment ]
-    [ text "COLLECTION" ]]
-    , div []
-      [ button [ class "exit-button", onClick Decrement ]
-    [ text "EXIT" ]]
-    
-    
-    
-    
+      [ h1 [ ] [ text "Tangram" ] ]
+    , buttons [ spanMarginRight (button Play "PLAY")
+              , spanMarginRight (button Options "OPTIONS")
+              , spanMarginRight (button Collection "COLLECTION")
+              , spanMarginRight (button Exit "EXIT") ]
     ]
