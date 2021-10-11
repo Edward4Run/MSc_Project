@@ -12,7 +12,7 @@
 - Day 4: Learn Elm, read example program in Elm (I don't want to use Svg to draw the display)
 - Day 5: Learn Elm, read example program about how to solve the page trasitions problem in Elm, draw the Homepage of Tangram in Elm (Add buttons)
 - Day 6: Draw the Homepage of Tangram in Elm (layout)
-- Day 7: Modify the layout *(haven't figured out very clearly how to do)*
+- Day 7: Modify the layout *~~(haven't figured out very clearly how to do)~~*
 ## Next Week Plan
 - [ ] 
 - [ ] 
