@@ -6,5 +6,5 @@
 - I made a display for my game.
 - I write a HelloWorld program and a counter program to get familiar with Elm.
 ## Next Week Plan
-- [ ] I'd like to read documents about Github, Elm and FRP.
+- [x] I'd like to read documents about Github, Elm and FRP.
 - [ ] I'd like to draw the game board and make the landing screen in Elm.

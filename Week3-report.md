@@ -1,10 +1,10 @@
 # Weekly report for Week 3: 05/10 -- 12/10
 ## Weekly Reading
-- First item: 
-- Second item: 
+- First item: read many programs about page trasitions
+- Second item: learn Elm (Browser.element, Browser.document, Browser.application)
 ## Weekly Implementation
-- 
-- 
+- Display of the homepage
+- Some button fuctions
 ## Daily Record
 - Day 1: Learn Elm
 - Day 2: Start coding for Tangram
@@ -14,5 +14,4 @@
 - Day 6: Draw the Homepage of Tangram in Elm (layout)
 - Day 7: Modify the layout *~~(haven't figured out very clearly how to do)~~*
 ## Next Week Plan
-- [ ] 
-- [ ] 
+- [ ] Draw the play board of Tangram

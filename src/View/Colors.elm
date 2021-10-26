@@ -1,4 +1,4 @@
-module View.Colors exposing (black, blackString, gray, lightGray, red, text, white)
+module View.Colors exposing (..)
 
 import Css exposing (hex)
 
