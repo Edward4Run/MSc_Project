@@ -1,12 +1,16 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, h1, span, text, img)
-import Html.Attributes exposing (..)
+import Html exposing (Html, div, h1, text)
+import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import View.Display as Display
 import View.Puzzles as Puzzles
 import Page exposing (GameState(..))
+import Draggable
+import Svg exposing (circle, ellipse, line, svg, rect)
+import Svg.Attributes as SA exposing (width, height, viewBox, x, y)
+import Svg.Events exposing (onMouseUp)
 
 -- MAIN
 main =
@@ -14,27 +18,38 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         }
 
+
+type alias Position =
+    { x : Float
+    , y : Float
+    }
 
 -- MODEL
 type alias Model =
   { level : Int
   , state : GameState
+  , xy : Position
+  , drag : Draggable.State ()
   }
 
 -- INIT
 
 init : () -> ( Model, Cmd Msg )
-init _ = ( { level = 1, state = NotPlaying}, Cmd.none )
+init _ = ( { level = 1, state = HomePage, xy = Position 32 32, drag = Draggable.init}, Cmd.none )
 
+dragConfig : Draggable.Config () Msg
+dragConfig =
+    Draggable.basicConfig OnDragBy
 
 -- UPDATE
-
 type Msg
     = Play
     | Exit
+    | OnDragBy Draggable.Delta
+    | DragMsg (Draggable.Msg ())
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -43,12 +58,41 @@ update msg model =
       ( { model | state = Playing }, Cmd.none )
     Exit ->
       ( { model | state = Won }, Cmd.none )
+    OnDragBy ( dx, dy ) ->
+            ( { model | xy = Position (model.xy.x + dx) (model.xy.y + dy) }
+            , Cmd.none
+            )
+    DragMsg dragMsg ->
+        Draggable.update dragConfig dragMsg model
 
 
 -- SUB
-
+subscriptions : Model -> Sub Msg
+subscriptions { drag } =
+    Draggable.subscriptions DragMsg drag
 
 -- VIEW
+view : Model -> Html Msg
+view model =
+  case model.state of
+    HomePage ->
+      viewHomePage model
+    Playing ->
+      viewPlayArea model
+    Won ->
+      text "You Won!"
+
+viewHomePage : Model -> Html Msg
+viewHomePage model = 
+  Display.background
+      [ Display.menu
+        [ h1 [ style "text-align" "center"
+              , style "font-family" "Marker Felt" ]
+              [ text "Tangram" ]
+        , buttons [ button Play "PLAY"
+                  , button Exit "EXIT" ]]
+      ]
+
 button : Msg -> String -> Html Msg
 button clickMsg content =
     div
@@ -57,7 +101,7 @@ button clickMsg content =
         , style "font-size" "24px"
         , style "font-family" "Chalkduster"
         , style "background-color" Display.white
-        , style "margin" "10px"
+        , style "margin-top" "30px"
         , style "cursor" "pointer"
         , style "border-radius" "10px"
         , style "line-height" "50px"
@@ -75,58 +119,21 @@ buttons =
         , style "text-align" "center"
         ]
 
-spanMarginRight : Html Msg -> Html Msg
-spanMarginRight child =
-    span [ style "margin-bottom" "20px" ] [ child ]
+viewPlayArea : Model -> Html Msg
+viewPlayArea model = 
+  Display.background
+        [ puzzleArea model
+        , gridArea]
 
-
-view : Model -> Html Msg
-view model =
-  case model.state of
-    NotPlaying ->
-      div [ style "overflow" "auto"
-          , style "height" "100vh"
-          , style "display" "flex"
-          , style "flex-direction" "column"
-          , style "align-items" "center"
-          , style "background-color" Display.background
-          ]
-          [ div [ style "width" "300px"
-                , style "height" "400px"
-                , style "margin-top" "200px"
-                , style "display" "flex"
-                , style "flex-direction" "column"
-                , style "align-items" "center"
-                , style "background-color" Display.lightGray ]
-            [ h1 [ style "text-align" "center"
-                  , style "font-family" "Marker Felt" ]
-                  [ text "Tangram" ]
-            , buttons [ button Play "PLAY"
-                      , button Exit "EXIT" ]]
-          ]
-    Playing ->
-      div [ style "overflow" "auto"
-          , style "height" "100vh"
-          , style "display" "flex"
-          , style "justify-content" "center"
-          , style "align-items" "center"
-          , style "background-color" Display.background
-          ]
-          [puzzleArea
-          , gridArea
-          , puzzleArea]
-    Won ->
-      text "You Won!"
-
-puzzleArea : Html Msg
-puzzleArea = 
+puzzleArea : Model -> Html Msg
+puzzleArea model = 
   div [ style "width" "500px"
       , style "height" "500px"
       , style "border" "1px solid black"
       , style "display" "flex"
       , style "justify-content" "center"
-      , style "align-items" "center"]
-      [ Puzzles.seven ]
+      , style "align-items" "center" ]
+      [ seven model ]
 
 gridArea : Html Msg
 gridArea = 
@@ -134,3 +141,24 @@ gridArea =
       , style "height" "500px"
       , style "border" "1px solid black"]
       []
+
+seven : Model -> Html Msg
+seven model = 
+  let
+    translate =
+        "translate(" ++ String.fromFloat model.xy.x ++ "px, " ++ String.fromFloat model.xy.y ++ "px)"
+  in
+  svg
+    [ style "transform" translate
+    , width "80"
+    , height "120"
+    , viewBox "0 0 80 120"
+    , style "stroke" "currentColor"
+    , style "cursor" "move"
+    , Draggable.mouseTrigger () DragMsg
+    ]
+    [ rect [ x "0", y "0", width "40", height "40" ] []
+    , rect [ x "0", y "40", width "40", height "40" ] []
+    , rect [ x "0", y "80", width "40", height "40" ] []
+    , rect [ x "40", y "0", width "40", height "40" ] []
+    ]
