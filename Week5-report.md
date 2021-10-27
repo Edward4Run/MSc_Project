@@ -8,4 +8,4 @@
 - change the display
 ## Next Week Plan
 - [ ] Draw the play board of Tangram
-- [ ] 
+- [ ] Complete Level 1 of the game

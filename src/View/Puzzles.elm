@@ -1,9 +1,9 @@
 module View.Puzzles exposing (..)
 
-import Css
-import Html.Styled exposing (Html)
-import Svg.Styled as Svg exposing (circle, ellipse, line, svg, rect)
-import Svg.Styled.Attributes exposing (..)
+import Html exposing (Html)
+import Svg exposing (circle, ellipse, line, svg, rect)
+import Svg.Attributes exposing (..)
+import Svg.Events exposing (onMouseUp)
 
 arrowUp : Html msg
 arrowUp =
@@ -12,7 +12,7 @@ arrowUp =
         , height "42"
         , viewBox "0 0 42 24"
         , fill "none"
-        , Svg.Styled.Attributes.style "stroke: currentColor;"
+        , style "stroke: currentColor;"
         ]
         [ Svg.path
             [ d "M1.84338 22.1964L20.9999 3.03992L40.1563 22.1964"
@@ -24,17 +24,13 @@ arrowUp =
 seven : Html msg
 seven = 
     svg
-        [ width "120"
+        [ width "80"
         , height "120"
-        , viewBox "0 0 120 120"
+        , viewBox "0 0 80 120"
+        , style "stroke: currentColor;"
         ]
-        [ rect
-            [ x "10"
-            , y "10"
-            , width "100"
-            , height "100"
-            , rx "15"
-            , ry "15"
-            ]
-            []
+        [ rect [ x "0", y "0", width "40", height "40" ] []
+        , rect [ x "0", y "40", width "40", height "40" ] []
+        , rect [ x "0", y "80", width "40", height "40" ] []
+        , rect [ x "40", y "0", width "40", height "40" ] []
         ]
