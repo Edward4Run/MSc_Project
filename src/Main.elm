@@ -139,8 +139,22 @@ gridArea : Html Msg
 gridArea = 
   div [ style "width" "500px"
       , style "height" "500px"
-      , style "border" "1px solid black"]
-      []
+      , style "border" "1px solid black"
+      , style "display" "flex"
+      , style "justify-content" "center"
+      , style "align-items" "center" ]
+      [ div [ style "width" "40px"
+            , style "height" "40px"
+            , style "background" Display.gray
+            , style "border" "1px solid black" ] []
+      , div [ style "width" "40px"
+            , style "height" "40px"
+            , style "background" Display.gray
+            , style "border" "1px solid black" ] []
+      , div [ style "width" "40px"
+            , style "height" "40px"
+            , style "background" Display.gray
+            , style "border" "1px solid black" ] [] ]
 
 seven : Model -> Html Msg
 seven model = 
@@ -150,15 +164,14 @@ seven model =
   in
   svg
     [ style "transform" translate
-    , width "80"
-    , height "120"
-    , viewBox "0 0 80 120"
+    , width "120"
+    , height "40"
+    , viewBox "0 0 120 40"
     , style "stroke" "currentColor"
     , style "cursor" "move"
     , Draggable.mouseTrigger () DragMsg
     ]
     [ rect [ x "0", y "0", width "40", height "40" ] []
-    , rect [ x "0", y "40", width "40", height "40" ] []
-    , rect [ x "0", y "80", width "40", height "40" ] []
     , rect [ x "40", y "0", width "40", height "40" ] []
+    , rect [ x "80", y "0", width "40", height "40" ] []
     ]

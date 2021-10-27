@@ -21,16 +21,15 @@ arrowUp =
             []
         ]
 
-seven : Html msg
-seven = 
+one : Html msg
+one = 
     svg
         [ width "80"
-        , height "120"
-        , viewBox "0 0 80 120"
+        , height "40"
+        , viewBox "0 0 80 40"
         , style "stroke: currentColor;"
         ]
         [ rect [ x "0", y "0", width "40", height "40" ] []
-        , rect [ x "0", y "40", width "40", height "40" ] []
-        , rect [ x "0", y "80", width "40", height "40" ] []
         , rect [ x "40", y "0", width "40", height "40" ] []
+        , rect [ x "80", y "0", width "40", height "40" ] []
         ]

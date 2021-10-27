@@ -7,8 +7,7 @@ import Html.Attributes exposing (style)
 gray = "#C4C4C4"
 lightGray = "#CCCCCC"
 red =  "#E65A5A"
-blackString = "#000000"
-black = blackString
+black = "#000000"
 white = "#ffffff"
 text = "#545454"
 
