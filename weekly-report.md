@@ -9,7 +9,7 @@
 - [x] I'd like to read documents about Github, Elm and FRP.
 - [ ] I'd like to draw the game board and make the landing screen in Elm.
 
-# Weekly report for Week 3: 05/10 -- 12/10
+# :triangular_flag_on_post: Weekly report for Week 3: 05/10 -- 12/10
 ## Weekly Reading
 - First item: read many programs about page trasitions
 - Second item: learn Elm (Browser.element, Browser.document, Browser.application)
@@ -27,7 +27,7 @@
 ## Next Week Plan
 - [ ] Draw the play board of Tangram
 
-# Weekly report for Week 4: 12/10 -- 19/10
+# :triangular_flag_on_post: Weekly report for Week 4: 12/10 -- 19/10
 ## Weekly Reading
 - First item: 
 - Second item: 
@@ -36,7 +36,7 @@
 ## Next Week Plan
 - [ ] Draw the play board of Tangram
 
-# Weekly report for Week 5: 19/10 -- 26/10
+# :triangular_flag_on_post: Weekly report for Week 5: 19/10 -- 26/10
 ## Weekly Reading
 - First item: elm-html5-drag-drop
 - Second item: css
@@ -48,7 +48,7 @@
 - [ ] Draw the play board of Tangram
 - [ ] Complete Level 1 of the game
 
-# Weekly report for Week 6: 26/10 -- 02/11
+# :triangular_flag_on_post: Weekly report for Week 6: 26/10 -- 02/11
 ## Weekly Reading
 - First item: Elm programs about draggable
 - Second item: 
