@@ -1,6 +1,5 @@
-#  Weekly report for Week 2: 28/09 -- 05/10
+# :triangular_flag_on_post: Weekly report for Week 2: 28/09 -- 05/10
 ## Weekly Reading
-:triangular_flag_on_post:
 - First item: I learned about Elm.
 - Second item: I learned about Functional Reactive Programming.
 ## Weekly Implementation
