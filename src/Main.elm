@@ -1,16 +1,17 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, h1, text)
-import Html.Attributes exposing (style)
+import Html exposing (Html, div, h1, text, img)
+import Html.Attributes exposing (style, src, width)
 import Html.Events exposing (onClick)
 import View.Display as Display
 import View.Puzzles as Puzzles
 import Page exposing (GameState(..))
-import Draggable
-import Svg exposing (circle, ellipse, line, svg, rect)
-import Svg.Attributes as SA exposing (width, height, viewBox, x, y)
-import Svg.Events exposing (onMouseUp)
+import Html5.DragDrop as DragDrop
+import Json.Decode exposing (Value)
+import Svg.Attributes exposing (result)
+
+port dragstart : Value -> Cmd msg
 
 -- MAIN
 main =
@@ -22,34 +23,28 @@ main =
         }
 
 
-type alias Position =
-    { x : Float
-    , y : Float
-    }
+type Position
+    = Left
+    | Right
 
 -- MODEL
 type alias Model =
   { level : Int
   , state : GameState
-  , xy : Position
-  , drag : Draggable.State ()
+  , data : { count : Int, position : Position }
+  , dragDrop : DragDrop.Model Int Position
   }
 
 -- INIT
 
 init : () -> ( Model, Cmd Msg )
-init _ = ( { level = 1, state = HomePage, xy = Position 32 32, drag = Draggable.init}, Cmd.none )
-
-dragConfig : Draggable.Config () Msg
-dragConfig =
-    Draggable.basicConfig OnDragBy
+init _ = ( { level = 1, state = HomePage, data = { count = 0, position = Left} , dragDrop = DragDrop.init}, Cmd.none )
 
 -- UPDATE
 type Msg
     = Play
     | Exit
-    | OnDragBy Draggable.Delta
-    | DragMsg (Draggable.Msg ())
+    | DragDropMsg (DragDrop.Msg Int Position)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -58,18 +53,37 @@ update msg model =
       ( { model | state = Playing }, Cmd.none )
     Exit ->
       ( { model | state = Won }, Cmd.none )
-    OnDragBy ( dx, dy ) ->
-            ( { model | xy = Position (model.xy.x + dx) (model.xy.y + dy) }
-            , Cmd.none
+    DragDropMsg msg_ ->
+            let
+                ( model_, result ) =
+                    DragDrop.update msg_ model.dragDrop
+            in
+            ( { model
+                | dragDrop = model_
+                , data =
+                    case result of
+                        Nothing ->
+                            model.data
+
+                        Just ( count, position, _ ) ->
+                            { count = count + 1, position = position }
+                , state = 
+                    case model.data.position of
+                        Left ->
+                          model.state
+                        Right ->
+                          Won
+              }
+            , DragDrop.getDragstartEvent msg_
+                |> Maybe.map (.event >> dragstart)
+                |> Maybe.withDefault Cmd.none
             )
-    DragMsg dragMsg ->
-        Draggable.update dragConfig dragMsg model
 
 
 -- SUB
 subscriptions : Model -> Sub Msg
-subscriptions { drag } =
-    Draggable.subscriptions DragMsg drag
+subscriptions model=
+    Sub.none
 
 -- VIEW
 view : Model -> Html Msg
@@ -123,55 +137,72 @@ viewPlayArea : Model -> Html Msg
 viewPlayArea model = 
   Display.background
         [ puzzleArea model
-        , gridArea]
+        , gridArea model ]
 
 puzzleArea : Model -> Html Msg
 puzzleArea model = 
+  div ([ style "width" "500px"
+      , style "height" "500px"
+      , style "border" "1px solid black"
+      , style "display" "flex"
+      , style "justify-content" "space-around"
+      , style "align-items" "center"
+      , style "margin" "20px" ]
+      ++ (if model.data.position /= Left then
+                    DragDrop.droppable DragDropMsg Left
+
+                else
+                    []
+               )
+      )
+      (if model.data.position == Left then
+        [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) []
+        ]
+
+      else
+          [
+          ]
+      )
+
+gridArea : Model -> Html Msg
+gridArea model = 
   div [ style "width" "500px"
       , style "height" "500px"
       , style "border" "1px solid black"
       , style "display" "flex"
       , style "justify-content" "center"
       , style "align-items" "center" ]
-      [ seven model ]
+      [ div ([ style "display" "flex"
+              , style "justify-content" "center"
+              , style "align-items" "center"]
+              ++ (if model.data.position /= Right then
+                    DragDrop.droppable DragDropMsg Right
 
-gridArea : Html Msg
-gridArea = 
-  div [ style "width" "500px"
-      , style "height" "500px"
-      , style "border" "1px solid black"
-      , style "display" "flex"
-      , style "justify-content" "center"
-      , style "align-items" "center" ]
-      [ div [ style "width" "40px"
-            , style "height" "40px"
-            , style "background" Display.gray
-            , style "border" "1px solid black" ] []
-      , div [ style "width" "40px"
-            , style "height" "40px"
-            , style "background" Display.gray
-            , style "border" "1px solid black" ] []
-      , div [ style "width" "40px"
-            , style "height" "40px"
-            , style "background" Display.gray
-            , style "border" "1px solid black" ] [] ]
+                else
+                    []
+               )
+            )
+            (if model.data.position == Right then
+              [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) []
+              ]
 
-seven : Model -> Html Msg
-seven model = 
-  let
-    translate =
-        "translate(" ++ String.fromFloat model.xy.x ++ "px, " ++ String.fromFloat model.xy.y ++ "px)"
-  in
-  svg
-    [ style "transform" translate
-    , width "120"
-    , height "40"
-    , viewBox "0 0 120 40"
-    , style "stroke" "currentColor"
-    , style "cursor" "move"
-    , Draggable.mouseTrigger () DragMsg
-    ]
-    [ rect [ x "0", y "0", width "40", height "40" ] []
-    , rect [ x "40", y "0", width "40", height "40" ] []
-    , rect [ x "80", y "0", width "40", height "40" ] []
-    ]
+            else
+                [ div [ style "width" "40px"
+                      , style "height" "40px"
+                      , style "background" Display.gray
+                      , style "border-style" "solid"
+                      , style "border-width" "1px 0 1px 1px" ] []
+                , div [ style "width" "40px"
+                      , style "height" "40px"
+                      , style "background" Display.gray
+                      , style "border-style" "solid"
+                      , style "border-width" "1px 0 1px 1px" ] []
+                , div [ style "width" "40px"
+                      , style "height" "40px"
+                      , style "background" Display.gray
+                      , style "border-style" "solid"
+                      , style "border-width" "1px 1px 1px 1px" ] [] 
+                ]
+            )
+      ]
+      

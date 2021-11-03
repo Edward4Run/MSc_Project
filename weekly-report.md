@@ -7,7 +7,7 @@
 - I write a HelloWorld program and a counter program to get familiar with Elm.
 ## Next Week Plan
 - [x] I'd like to read documents about Github, Elm and FRP.
-- [ ] I'd like to draw the game board and make the landing screen in Elm.
+- [x] I'd like to draw the game board and make the landing screen in Elm.
 
 # :triangular_flag_on_post: Weekly report for Week 3: 05/10 -- 12/10
 ## Weekly Reading
@@ -25,7 +25,7 @@
 - Day 6: Draw the Homepage of Tangram in Elm (layout)
 - Day 7: Modify the layout *~~(haven't figured out very clearly how to do)~~*
 ## Next Week Plan
-- [ ] Draw the play board of Tangram
+- [x] Draw the play board of Tangram
 
 # :triangular_flag_on_post: Weekly report for Week 4: 12/10 -- 19/10
 ## Weekly Reading
@@ -34,7 +34,6 @@
 ## Weekly Implementation
 -
 ## Next Week Plan
-- [ ] Draw the play board of Tangram
 
 # :triangular_flag_on_post: Weekly report for Week 5: 19/10 -- 26/10
 ## Weekly Reading
@@ -45,17 +44,24 @@
 - drag function
 - change the display
 ## Next Week Plan
-- [ ] Draw the play board of Tangram
-- [ ] Complete Level 1 of the game
+- [x] Draw the play board of Tangram
+- [x] Complete Level 1 of the game
 
 # :triangular_flag_on_post: Weekly report for Week 6: 26/10 -- 02/11
 ## Weekly Reading
 - First item: Elm programs about draggable
+- Second item: Elm (Maybe)
+## Weekly Implementation
+- Achieve level 1
+## Next Week Plan
+- [ ] Add next level button
+- [ ] adjust the display
+
+# :triangular_flag_on_post: Weekly report for Week 6: 26/10 -- 02/11
+## Weekly Reading
+- First item: 
 - Second item: 
-- Third items: 
 ## Weekly Implementation
 - 
-- 
 ## Next Week Plan
-- [ ] 
 - [ ] 
