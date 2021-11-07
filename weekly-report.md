@@ -57,7 +57,7 @@
 - [ ] Add next level button
 - [ ] adjust the display
 
-# :triangular_flag_on_post: Weekly report for Week 6: 26/10 -- 02/11
+# :triangular_flag_on_post: Weekly report for Week 7: 26/10 -- 02/11
 ## Weekly Reading
 - First item: 
 - Second item: 

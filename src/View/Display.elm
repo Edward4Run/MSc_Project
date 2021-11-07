@@ -19,6 +19,7 @@ background =
       , style "justify-content" "center"
       , style "align-items" "center"
       , style "background-color" lightGray
+      , style "z-index" "1"
       ]
 
 menu = 
