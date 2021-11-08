@@ -4355,6 +4355,43 @@ function _Browser_load(url)
 		}
 	}));
 }
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
@@ -5145,7 +5182,6 @@ var $elm$core$Task$perform = F2(
 	});
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$HomePage = {$: 'HomePage'};
-var $author$project$Main$Left = {$: 'Left'};
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging = {$: 'NotDragging'};
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$init = $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging;
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
@@ -5153,14 +5189,8 @@ var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
-			data: {isCompleted: false, position: $author$project$Main$Left},
 			dragDrop: $norpan$elm_html5_drag_drop$Html5$DragDrop$init,
-			gs: {
-				isCompleted: false,
-				level: 1,
-				puzzles: {position: $author$project$Main$Left, value: 1},
-				status: $author$project$Main$HomePage
-			}
+			gs: {isCompleted: false, level: 1, status: $author$project$Main$HomePage}
 		},
 		$elm$core$Platform$Cmd$none);
 };
@@ -5333,12 +5363,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {
-								isCompleted: false,
-								level: 1,
-								puzzles: {position: $author$project$Main$Left, value: 1},
-								status: $author$project$Main$Playing
-							}
+							gs: {isCompleted: false, level: model.gs.level, status: $author$project$Main$Playing}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Exit':
@@ -5346,12 +5371,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {
-								isCompleted: false,
-								level: 1,
-								puzzles: {position: $author$project$Main$Left, value: 1},
-								status: $author$project$Main$HomePage
-							}
+							gs: {isCompleted: model.gs.isCompleted, level: model.gs.level, status: $author$project$Main$HomePage}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Next':
@@ -5359,12 +5379,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {
-								isCompleted: false,
-								level: model.gs.level + 1,
-								puzzles: {position: $author$project$Main$Left, value: 1},
-								status: $author$project$Main$Playing
-							}
+							gs: {isCompleted: model.gs.isCompleted, level: model.gs.level + 1, status: $author$project$Main$Playing}
 						}),
 					$elm$core$Platform$Cmd$none);
 			default:
@@ -5376,22 +5391,11 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							data: function () {
-								if (result.$ === 'Nothing') {
-									return model.data;
-								} else {
-									var _v3 = result.a;
-									var isCompleted = _v3.a;
-									var position = _v3.b;
-									return {isCompleted: false, position: position};
-								}
-							}(),
 							dragDrop: model_,
 							gs: {
 								isCompleted: false,
-								level: 1,
-								puzzles: {position: $author$project$Main$Left, value: 1},
-								status: (!model.data.isCompleted) ? model.gs.status : $author$project$Main$Won
+								level: model.gs.level,
+								status: (!model.gs.isCompleted) ? model.gs.status : $author$project$Main$Won
 							}
 						}),
 					A2(
@@ -5459,59 +5463,63 @@ var $author$project$Main$buttons = $elm$html$Html$div(
 			$elm$html$Html$Attributes$class('buttons')
 		]));
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $author$project$Main$viewHomePage = function (model) {
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('background')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('menu')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$h1,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('title')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Tangram')
-							])),
-						$author$project$Main$buttons(
-						_List_fromArray(
-							[
-								A2($author$project$Main$button, $author$project$Main$Play, 'PLAY'),
-								A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
-							]))
-					]))
-			]));
-};
+var $author$project$Main$viewHomePage = A2(
+	$elm$html$Html$div,
+	_List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('background')
+		]),
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('menu')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h1,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('title')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Tangram')
+						])),
+					$author$project$Main$buttons(
+					_List_fromArray(
+						[
+							A2($author$project$Main$button, $author$project$Main$Play, 'PLAY'),
+							A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
+						]))
+				]))
+		]));
+var $author$project$Main$container = $elm$html$Html$div(
+	_List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('gridArea')
+		]));
 var $author$project$Main$DragDropMsg = function (a) {
 	return {$: 'DragDropMsg', a: a};
 };
 var $author$project$Main$Right = {$: 'Right'};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnd = {$: 'DragEnd'};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragStart = F2(
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnter = function (a) {
+	return {$: 'DragEnter', a: a};
+};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragLeave = function (a) {
+	return {$: 'DragLeave', a: a};
+};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragOver = F3(
+	function (a, b, c) {
+		return {$: 'DragOver', a: a, b: b, c: c};
+	});
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$Drop = F2(
 	function (a, b) {
-		return {$: 'DragStart', a: a, b: b};
+		return {$: 'Drop', a: a, b: b};
 	});
-var $elm$virtual_dom$VirtualDom$attribute = F2(
-	function (key, value) {
-		return A2(
-			_VirtualDom_attribute,
-			_VirtualDom_noOnOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlUri(value));
-	});
-var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
 var $elm$core$Basics$composeL = F3(
 	function (g, f, x) {
 		return g(
@@ -5540,45 +5548,6 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions = F3(
 					return {message: msg, preventDefault: preventDefault, stopPropagation: stopPropagation};
 				},
 				decoder));
-	});
-var $elm$json$Json$Decode$value = _Json_decodeValue;
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$draggable = F2(
-	function (wrap, drag) {
-		return _List_fromArray(
-			[
-				A2($elm$html$Html$Attributes$attribute, 'draggable', 'true'),
-				A3(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
-				'dragstart',
-				{preventDefault: false, stopPropagation: true},
-				A2(
-					$elm$json$Json$Decode$map,
-					A2(
-						$elm$core$Basics$composeL,
-						wrap,
-						$norpan$elm_html5_drag_drop$Html5$DragDrop$DragStart(drag)),
-					$elm$json$Json$Decode$value)),
-				A3(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
-				'dragend',
-				{preventDefault: false, stopPropagation: true},
-				$elm$json$Json$Decode$succeed(
-					wrap($norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnd)))
-			]);
-	});
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnter = function (a) {
-	return {$: 'DragEnter', a: a};
-};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragLeave = function (a) {
-	return {$: 'DragLeave', a: a};
-};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragOver = F3(
-	function (a, b, c) {
-		return {$: 'DragOver', a: a, b: b, c: c};
-	});
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$Drop = F2(
-	function (a, b) {
-		return {$: 'Drop', a: a, b: b};
 	});
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$Position = F4(
 	function (width, height, x, y) {
@@ -5673,8 +5642,347 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$droppable = F2(
 					$norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder))
 			]);
 	});
+var $author$project$Main$square = function (a) {
+	return A2(
+		$elm$html$Html$div,
+		_Utils_ap(
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('square')
+				]),
+			A2($norpan$elm_html5_drag_drop$Html5$DragDrop$droppable, $author$project$Main$DragDropMsg, $author$project$Main$Right)),
+		_List_Nil);
+};
+var $elm$core$Array$repeat = F2(
+	function (n, e) {
+		return A2(
+			$elm$core$Array$initialize,
+			n,
+			function (_v0) {
+				return e;
+			});
+	});
+var $elm$core$Elm$JsArray$appendN = _JsArray_appendN;
+var $elm$core$Elm$JsArray$slice = _JsArray_slice;
+var $elm$core$Array$appendHelpBuilder = F2(
+	function (tail, builder) {
+		var tailLen = $elm$core$Elm$JsArray$length(tail);
+		var notAppended = ($elm$core$Array$branchFactor - $elm$core$Elm$JsArray$length(builder.tail)) - tailLen;
+		var appended = A3($elm$core$Elm$JsArray$appendN, $elm$core$Array$branchFactor, builder.tail, tail);
+		return (notAppended < 0) ? {
+			nodeList: A2(
+				$elm$core$List$cons,
+				$elm$core$Array$Leaf(appended),
+				builder.nodeList),
+			nodeListSize: builder.nodeListSize + 1,
+			tail: A3($elm$core$Elm$JsArray$slice, notAppended, tailLen, tail)
+		} : ((!notAppended) ? {
+			nodeList: A2(
+				$elm$core$List$cons,
+				$elm$core$Array$Leaf(appended),
+				builder.nodeList),
+			nodeListSize: builder.nodeListSize + 1,
+			tail: $elm$core$Elm$JsArray$empty
+		} : {nodeList: builder.nodeList, nodeListSize: builder.nodeListSize, tail: appended});
+	});
+var $elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
+	});
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
+};
+var $elm$core$Array$sliceLeft = F2(
+	function (from, array) {
+		var len = array.a;
+		var tree = array.c;
+		var tail = array.d;
+		if (!from) {
+			return array;
+		} else {
+			if (_Utils_cmp(
+				from,
+				$elm$core$Array$tailIndex(len)) > -1) {
+				return A4(
+					$elm$core$Array$Array_elm_builtin,
+					len - from,
+					$elm$core$Array$shiftStep,
+					$elm$core$Elm$JsArray$empty,
+					A3(
+						$elm$core$Elm$JsArray$slice,
+						from - $elm$core$Array$tailIndex(len),
+						$elm$core$Elm$JsArray$length(tail),
+						tail));
+			} else {
+				var skipNodes = (from / $elm$core$Array$branchFactor) | 0;
+				var helper = F2(
+					function (node, acc) {
+						if (node.$ === 'SubTree') {
+							var subTree = node.a;
+							return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
+						} else {
+							var leaf = node.a;
+							return A2($elm$core$List$cons, leaf, acc);
+						}
+					});
+				var leafNodes = A3(
+					$elm$core$Elm$JsArray$foldr,
+					helper,
+					_List_fromArray(
+						[tail]),
+					tree);
+				var nodesToInsert = A2($elm$core$List$drop, skipNodes, leafNodes);
+				if (!nodesToInsert.b) {
+					return $elm$core$Array$empty;
+				} else {
+					var head = nodesToInsert.a;
+					var rest = nodesToInsert.b;
+					var firstSlice = from - (skipNodes * $elm$core$Array$branchFactor);
+					var initialBuilder = {
+						nodeList: _List_Nil,
+						nodeListSize: 0,
+						tail: A3(
+							$elm$core$Elm$JsArray$slice,
+							firstSlice,
+							$elm$core$Elm$JsArray$length(head),
+							head)
+					};
+					return A2(
+						$elm$core$Array$builderToArray,
+						true,
+						A3($elm$core$List$foldl, $elm$core$Array$appendHelpBuilder, initialBuilder, rest));
+				}
+			}
+		}
+	});
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
+var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
+var $elm$core$Array$fetchNewTail = F4(
+	function (shift, end, treeEnd, tree) {
+		fetchNewTail:
+		while (true) {
+			var pos = $elm$core$Array$bitMask & (treeEnd >>> shift);
+			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (_v0.$ === 'SubTree') {
+				var sub = _v0.a;
+				var $temp$shift = shift - $elm$core$Array$shiftStep,
+					$temp$end = end,
+					$temp$treeEnd = treeEnd,
+					$temp$tree = sub;
+				shift = $temp$shift;
+				end = $temp$end;
+				treeEnd = $temp$treeEnd;
+				tree = $temp$tree;
+				continue fetchNewTail;
+			} else {
+				var values = _v0.a;
+				return A3($elm$core$Elm$JsArray$slice, 0, $elm$core$Array$bitMask & end, values);
+			}
+		}
+	});
+var $elm$core$Array$hoistTree = F3(
+	function (oldShift, newShift, tree) {
+		hoistTree:
+		while (true) {
+			if ((_Utils_cmp(oldShift, newShift) < 1) || (!$elm$core$Elm$JsArray$length(tree))) {
+				return tree;
+			} else {
+				var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, 0, tree);
+				if (_v0.$ === 'SubTree') {
+					var sub = _v0.a;
+					var $temp$oldShift = oldShift - $elm$core$Array$shiftStep,
+						$temp$newShift = newShift,
+						$temp$tree = sub;
+					oldShift = $temp$oldShift;
+					newShift = $temp$newShift;
+					tree = $temp$tree;
+					continue hoistTree;
+				} else {
+					return tree;
+				}
+			}
+		}
+	});
+var $elm$core$Elm$JsArray$unsafeSet = _JsArray_unsafeSet;
+var $elm$core$Array$sliceTree = F3(
+	function (shift, endIdx, tree) {
+		var lastPos = $elm$core$Array$bitMask & (endIdx >>> shift);
+		var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, lastPos, tree);
+		if (_v0.$ === 'SubTree') {
+			var sub = _v0.a;
+			var newSub = A3($elm$core$Array$sliceTree, shift - $elm$core$Array$shiftStep, endIdx, sub);
+			return (!$elm$core$Elm$JsArray$length(newSub)) ? A3($elm$core$Elm$JsArray$slice, 0, lastPos, tree) : A3(
+				$elm$core$Elm$JsArray$unsafeSet,
+				lastPos,
+				$elm$core$Array$SubTree(newSub),
+				A3($elm$core$Elm$JsArray$slice, 0, lastPos + 1, tree));
+		} else {
+			return A3($elm$core$Elm$JsArray$slice, 0, lastPos, tree);
+		}
+	});
+var $elm$core$Array$sliceRight = F2(
+	function (end, array) {
+		var len = array.a;
+		var startShift = array.b;
+		var tree = array.c;
+		var tail = array.d;
+		if (_Utils_eq(end, len)) {
+			return array;
+		} else {
+			if (_Utils_cmp(
+				end,
+				$elm$core$Array$tailIndex(len)) > -1) {
+				return A4(
+					$elm$core$Array$Array_elm_builtin,
+					end,
+					startShift,
+					tree,
+					A3($elm$core$Elm$JsArray$slice, 0, $elm$core$Array$bitMask & end, tail));
+			} else {
+				var endIdx = $elm$core$Array$tailIndex(end);
+				var depth = $elm$core$Basics$floor(
+					A2(
+						$elm$core$Basics$logBase,
+						$elm$core$Array$branchFactor,
+						A2($elm$core$Basics$max, 1, endIdx - 1)));
+				var newShift = A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep);
+				return A4(
+					$elm$core$Array$Array_elm_builtin,
+					end,
+					newShift,
+					A3(
+						$elm$core$Array$hoistTree,
+						startShift,
+						newShift,
+						A3($elm$core$Array$sliceTree, startShift, endIdx, tree)),
+					A4($elm$core$Array$fetchNewTail, startShift, end, endIdx, tree));
+			}
+		}
+	});
+var $elm$core$Array$translateIndex = F2(
+	function (index, _v0) {
+		var len = _v0.a;
+		var posIndex = (index < 0) ? (len + index) : index;
+		return (posIndex < 0) ? 0 : ((_Utils_cmp(posIndex, len) > 0) ? len : posIndex);
+	});
+var $elm$core$Array$slice = F3(
+	function (from, to, array) {
+		var correctTo = A2($elm$core$Array$translateIndex, to, array);
+		var correctFrom = A2($elm$core$Array$translateIndex, from, array);
+		return (_Utils_cmp(correctFrom, correctTo) > 0) ? $elm$core$Array$empty : A2(
+			$elm$core$Array$sliceLeft,
+			correctFrom,
+			A2($elm$core$Array$sliceRight, correctTo, array));
+	});
+var $author$project$Main$toIndexed2dList = F2(
+	function (width, height) {
+		return A3(
+			$elm$core$List$foldl,
+			F2(
+				function (y, result) {
+					return A2(
+						$elm$core$List$cons,
+						$elm$core$Array$toList(
+							A3(
+								$elm$core$Array$slice,
+								width * y,
+								(width * y) + width,
+								A2($elm$core$Array$repeat, width * height, 1))),
+						result);
+				}),
+			_List_Nil,
+			A2($elm$core$List$range, 0, height));
+	});
+var $author$project$Main$gridArea = function (level) {
+	var _v0 = function () {
+		switch (level) {
+			case 1:
+				return _Utils_Tuple2(1, 3);
+			case 2:
+				return _Utils_Tuple2(4, 2);
+			default:
+				return _Utils_Tuple2(0, 0);
+		}
+	}();
+	var width_ = _v0.a;
+	var height_ = _v0.b;
+	return $author$project$Main$container(
+		A2(
+			$elm$core$List$map,
+			$elm$html$Html$div(
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('grid-column')
+					])),
+			A2(
+				$elm$core$List$map,
+				$elm$core$List$map(
+					function (a) {
+						return $author$project$Main$square(a);
+					}),
+				A2($author$project$Main$toIndexed2dList, width_, height_))));
+};
+var $author$project$Main$Left = {$: 'Left'};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnd = {$: 'DragEnd'};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragStart = F2(
+	function (a, b) {
+		return {$: 'DragStart', a: a, b: b};
+	});
+var $elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
+var $elm$json$Json$Decode$value = _Json_decodeValue;
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$draggable = F2(
+	function (wrap, drag) {
+		return _List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$attribute, 'draggable', 'true'),
+				A3(
+				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
+				'dragstart',
+				{preventDefault: false, stopPropagation: true},
+				A2(
+					$elm$json$Json$Decode$map,
+					A2(
+						$elm$core$Basics$composeL,
+						wrap,
+						$norpan$elm_html5_drag_drop$Html5$DragDrop$DragStart(drag)),
+					$elm$json$Json$Decode$value)),
+				A3(
+				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
+				'dragend',
+				{preventDefault: false, stopPropagation: true},
+				$elm$json$Json$Decode$succeed(
+					wrap($norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnd)))
+			]);
+	});
 var $elm$html$Html$img = _VirtualDom_node('img');
-var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$html$Html$Attributes$src = function (url) {
 	return A2(
 		$elm$html$Html$Attributes$stringProperty,
@@ -5687,24 +5995,11 @@ var $elm$html$Html$Attributes$width = function (n) {
 		'width',
 		$elm$core$String$fromInt(n));
 };
-var $author$project$Main$gridArea = function (model) {
-	return A2(
-		$elm$html$Html$div,
-		_Utils_ap(
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('gridArea')
-				]),
-			(!_Utils_eq(model.data.position, $author$project$Main$Right)) ? A2($norpan$elm_html5_drag_drop$Html5$DragDrop$droppable, $author$project$Main$DragDropMsg, $author$project$Main$Right) : _List_Nil),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('grid-container')
-					]),
-				_Utils_eq(model.data.position, $author$project$Main$Right) ? _List_fromArray(
+var $author$project$Main$puzzleArea = function (level) {
+	var puzzles = function () {
+		switch (level) {
+			case 1:
+				return _List_fromArray(
 					[
 						A2(
 						$elm$html$Html$img,
@@ -5716,33 +6011,35 @@ var $author$project$Main$gridArea = function (model) {
 								$elm$html$Html$Attributes$width(120),
 								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1))),
 						_List_Nil)
-					]) : _List_fromArray(
+					]);
+			case 2:
+				return _List_fromArray(
 					[
 						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('grid')
-							]),
+						$elm$html$Html$img,
+						A2(
+							$elm$core$List$cons,
+							$elm$html$Html$Attributes$src('assets/puzzles/one.png'),
+							A2(
+								$elm$core$List$cons,
+								$elm$html$Html$Attributes$width(120),
+								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1))),
 						_List_Nil),
 						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('grid')
-							]),
-						_List_Nil),
+						$elm$html$Html$img,
 						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('grid')
-							]),
+							$elm$core$List$cons,
+							$elm$html$Html$Attributes$src('assets/puzzles/one.png'),
+							A2(
+								$elm$core$List$cons,
+								$elm$html$Html$Attributes$width(120),
+								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 2))),
 						_List_Nil)
-					]))
-			]));
-};
-var $author$project$Main$puzzleArea = function (model) {
+					]);
+			default:
+				return _List_Nil;
+		}
+	}();
 	return A2(
 		$elm$html$Html$div,
 		_Utils_ap(
@@ -5750,22 +6047,10 @@ var $author$project$Main$puzzleArea = function (model) {
 				[
 					$elm$html$Html$Attributes$class('puzzleArea')
 				]),
-			(!_Utils_eq(model.data.position, $author$project$Main$Left)) ? A2($norpan$elm_html5_drag_drop$Html5$DragDrop$droppable, $author$project$Main$DragDropMsg, $author$project$Main$Left) : _List_Nil),
-		_Utils_eq(model.data.position, $author$project$Main$Left) ? _List_fromArray(
-			[
-				A2(
-				$elm$html$Html$img,
-				A2(
-					$elm$core$List$cons,
-					$elm$html$Html$Attributes$src('assets/puzzles/one.png'),
-					A2(
-						$elm$core$List$cons,
-						$elm$html$Html$Attributes$width(120),
-						A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1))),
-				_List_Nil)
-			]) : _List_Nil);
+			A2($norpan$elm_html5_drag_drop$Html5$DragDrop$droppable, $author$project$Main$DragDropMsg, $author$project$Main$Left)),
+		puzzles);
 };
-var $author$project$Main$viewPlayArea = function (model) {
+var $author$project$Main$viewPlayArea = function (level) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -5774,20 +6059,19 @@ var $author$project$Main$viewPlayArea = function (model) {
 			]),
 		_List_fromArray(
 			[
-				$author$project$Main$puzzleArea(model),
-				$author$project$Main$gridArea(model),
-				A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
+				$author$project$Main$puzzleArea(level),
+				$author$project$Main$gridArea(level)
 			]));
 };
 var $author$project$Main$view = function (model) {
 	var _v0 = model.gs.status;
 	switch (_v0.$) {
 		case 'HomePage':
-			return $author$project$Main$viewHomePage(model);
+			return $author$project$Main$viewHomePage;
 		case 'Playing':
-			return $author$project$Main$viewPlayArea(model);
+			return $author$project$Main$viewPlayArea(model.gs.level);
 		default:
-			return $author$project$Main$viewPlayArea(model);
+			return $author$project$Main$viewPlayArea(model.gs.level);
 	}
 };
 var $author$project$Main$main = $elm$browser$Browser$element(

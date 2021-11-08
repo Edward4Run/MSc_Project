@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, h1, text, img, p)
+import Html exposing (Html, div, h1, text, img, span)
 import Html.Attributes exposing (src, width, class)
 import Html.Events exposing (onClick)
 import Html5.DragDrop as DragDrop
@@ -38,19 +38,9 @@ type Status
     | Playing
     | Won
 
-type alias Puzzle =
-  { img : String
-  , position : Position
-  }
-
 type Position
   = Left
   | Right
-
-type alias Gridfield =
-    { width : Int
-    , height : Int
-    }
 
 
 -- INIT
@@ -117,16 +107,16 @@ view : Model -> Html Msg
 view model =
   case model.gs.status of
     HomePage ->
-      viewHomePage model
+      viewHomePage
     Playing ->
-      viewPlayArea model
+      viewPlayArea model.gs.level
     Won ->
-      viewPlayArea model
+      viewPlayArea model.gs.level
 
 
 -- Homepage View
-viewHomePage : Model -> Html Msg
-viewHomePage model = 
+viewHomePage : Html Msg
+viewHomePage = 
   div [ class "background" ]
       [ div [ class "menu" ]
             [ h1 [ class "title" ] [ text "Tangram" ]
@@ -149,78 +139,73 @@ buttons =
 
 
 -- PlayArea View
-viewPlayArea : Model -> Html Msg
-viewPlayArea model = 
+viewPlayArea : Int -> Html Msg
+viewPlayArea level = 
   div [ class "background" ]
-      [ puzzleArea model
-      , gridArea model
-      , button Exit "EXIT"]
+      [ puzzleArea level
+      , gridArea level]
 
-puzzleArea : Model -> Html Msg
-puzzleArea model = 
+puzzleArea : Int -> Html Msg
+puzzleArea level = 
+  let
+    puzzles = 
+      case level of
+        1 ->
+          [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) [] ]
+
+        2 ->
+          [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) []
+          , img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 2) [] ]
+
+        _ ->
+          [ ]
+  in
   div ([ class "puzzleArea" ]
-      ++ (if model.data.position /= Left then
-                    DragDrop.droppable DragDropMsg Left
-
-          else
-              []
-          )
+      ++ DragDrop.droppable DragDropMsg Left
       )
-      (if model.data.position == Left then
-        [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) [] ]
+      puzzles
 
-      else
-          []
+gridArea : Int -> Html Msg
+gridArea level = 
+  let
+    ( width_, height_ ) =
+      case level of
+          1 -> (1, 3)
+          2 -> (4, 2)
+          _ -> (0, 0)
+  in
+  toIndexed2dList width_ height_
+    |> List.map 
+        (List.map
+                  (\a ->
+                      square a
+                  )
+        )
+    |> List.map (div [ class "grid-column" ])
+    |> container
+
+square : Int -> Html Msg
+square a = 
+  div ([ class "square" ]
+      ++ DragDrop.droppable DragDropMsg Right
       )
+        [ ]
 
-gridArea : Model -> Html Msg
-gridArea model = 
-  div ([ class "gridArea" ]
-      ++ (if model.data.position /= Right then
-            DragDrop.droppable DragDropMsg Right
+container : List (Html Msg) -> Html Msg
+container =
+    div [ class "gridArea" ]
+        
 
-          else
-              []
-          )
-      )
-      [ div [ class "grid-container" ]
-          (if model.data.position == Right then
-            [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) [] ]
-
-          else
-            [ div [ class "grid" ] []
-            , div [ class "grid" ] []
-            , div [ class "grid" ] [] ]
-          )
-      ]
-
-puzzleinit : Int -> Html Msg
-puzzleinit level = 
-  case level of
-    1 ->
-      img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) []
-
-    2 ->
-      img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) []
-
-    _ ->
-      img [] []
-
-grids : Int -> Html Msg
-grids level = 
-  case level of
-    1 ->
-      div []
-          [ div [ class "grid" ] []
-          , div [ class "grid" ] []
-          , div [ class "grid" ] [] ]
-                
-    2 ->
-      div []
-          [ div [ class "grid" ] []
-          , div [ class "grid" ] []
-          , div [ class "grid" ] [] ]
-
-    _ ->
-      div [] []
+toIndexed2dList : Int -> Int -> List (List Int)
+toIndexed2dList width height =
+    List.range 0 height
+        |> List.foldl
+            (\y result ->
+                (Array.repeat (width * height) 1
+                    |> Array.slice (width * y) (width * y + width)
+                    |> Array.toList
+                )
+                    :: result
+            )
+            []
 
