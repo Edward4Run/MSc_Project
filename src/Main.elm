@@ -1,4 +1,4 @@
-port module Main exposing (main)
+module Main exposing (main)
 
 import Browser
 import Html exposing (Html, div, h1, text, img, span)
@@ -7,8 +7,7 @@ import Html.Events exposing (onClick)
 import Html5.DragDrop as DragDrop
 import Json.Decode exposing (Value)
 import Array exposing (Array)
-
-port dragstart : Value -> Cmd msg
+import View.Puzzles as Puzzles
 
 
 -- MAIN
@@ -30,7 +29,6 @@ type alias Model =
 type alias GameState =
     { level : Int
     , status : Status
-    , isCompleted : Bool
     }
 
 type Status
@@ -46,9 +44,8 @@ type Position
 -- INIT
 
 init : () -> ( Model, Cmd Msg )
-init _ = ( { gs = { level = 1
-                  , status = HomePage
-                  , isCompleted = False }
+init _ = ( { gs = { level = 2
+                  , status = HomePage }
             , dragDrop = DragDrop.init}
           , Cmd.none )
 
@@ -65,15 +62,12 @@ update msg model =
   case msg of
     Play ->
       ( { model | gs = { level = model.gs.level
-                        , isCompleted = False
                         , status = Playing } }, Cmd.none )
     Exit ->
       ( { model | gs = { level = model.gs.level
-                        , isCompleted = model.gs.isCompleted
                         , status = HomePage} }, Cmd.none )
     Next ->
       ( { model | gs = { level = model.gs.level + 1
-                        , isCompleted = model.gs.isCompleted
                         , status = Playing } }, Cmd.none)
     DragDropMsg msg_ ->
       let
@@ -82,17 +76,14 @@ update msg model =
       in
         ( { model
             | dragDrop = model_
-            , gs = { isCompleted = False
-                    , status = 
-                      if model.gs.isCompleted == False then
+            , gs = { status = 
+                      if model.gs.status == Won then
                           model.gs.status
                       else
-                          Won 
+                          Won
                       , level = model.gs.level}
           }
-        , DragDrop.getDragstartEvent msg_
-            |> Maybe.map (.event >> dragstart)
-            |> Maybe.withDefault Cmd.none
+        , Cmd.none
         )
 
 
@@ -120,22 +111,18 @@ viewHomePage =
   div [ class "background" ]
       [ div [ class "menu" ]
             [ h1 [ class "title" ] [ text "Tangram" ]
-            , buttons [ button Play "PLAY"
-                      , button Exit "EXIT" ]]
+            , div [ class "buttons" ]
+                  [ menuButton Play "PLAY"
+                  , menuButton Exit "EXIT" ] ]
       ]
 
-button : Msg -> String -> Html Msg
-button clickMsg content =
+menuButton : Msg -> String -> Html Msg
+menuButton clickMsg content =
   div
-    [ class "button"
+    [ class "menu-button"
     , onClick clickMsg
     ]
     [ text content ]
-
-buttons : List (Html Msg) -> Html Msg
-buttons =
-  div
-    [ class "buttons" ]
 
 
 -- PlayArea View
@@ -143,7 +130,8 @@ viewPlayArea : Int -> Html Msg
 viewPlayArea level = 
   div [ class "background" ]
       [ puzzleArea level
-      , gridArea level]
+      , gridArea level
+      , menuButton Exit "EXIT" ]
 
 puzzleArea : Int -> Html Msg
 puzzleArea level = 
@@ -154,8 +142,8 @@ puzzleArea level =
           [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) [] ]
 
         2 ->
-          [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) []
-          , img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 2) [] ]
+          [ img (src "assets/puzzles/seven.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) []
+          , img (src "assets/puzzles/seven.png" :: width 120 :: DragDrop.draggable DragDropMsg 2) [] ]
 
         _ ->
           [ ]
@@ -171,7 +159,7 @@ gridArea level =
     ( width_, height_ ) =
       case level of
           1 -> (1, 3)
-          2 -> (4, 2)
+          2 -> (4, 3)
           _ -> (0, 0)
   in
   toIndexed2dList width_ height_

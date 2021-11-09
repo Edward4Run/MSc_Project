@@ -5190,7 +5190,7 @@ var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			dragDrop: $norpan$elm_html5_drag_drop$Html5$DragDrop$init,
-			gs: {isCompleted: false, level: 1, status: $author$project$Main$HomePage}
+			gs: {level: 2, status: $author$project$Main$HomePage}
 		},
 		$elm$core$Platform$Cmd$none);
 };
@@ -5201,32 +5201,6 @@ var $author$project$Main$subscriptions = function (model) {
 };
 var $author$project$Main$Playing = {$: 'Playing'};
 var $author$project$Main$Won = {$: 'Won'};
-var $elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
-var $author$project$Main$dragstart = _Platform_outgoingPort('dragstart', $elm$core$Basics$identity);
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$getDragstartEvent = function (msg) {
-	if (msg.$ === 'DragStart') {
-		var dragId = msg.a;
-		var event = msg.b;
-		return $elm$core$Maybe$Just(
-			{dragId: dragId, event: event});
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return $elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver = F4(
 	function (a, b, c, d) {
 		return {$: 'DraggedOver', a: a, b: b, c: c, d: d};
@@ -5346,15 +5320,6 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$updateCommon = F3(
 		return _Utils_Tuple2(model, $elm$core$Maybe$Nothing);
 	});
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$update = $norpan$elm_html5_drag_drop$Html5$DragDrop$updateCommon(false);
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5363,7 +5328,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {isCompleted: false, level: model.gs.level, status: $author$project$Main$Playing}
+							gs: {level: model.gs.level, status: $author$project$Main$Playing}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Exit':
@@ -5371,7 +5336,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {isCompleted: model.gs.isCompleted, level: model.gs.level, status: $author$project$Main$HomePage}
+							gs: {level: model.gs.level, status: $author$project$Main$HomePage}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Next':
@@ -5379,7 +5344,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {isCompleted: model.gs.isCompleted, level: model.gs.level + 1, status: $author$project$Main$Playing}
+							gs: {level: model.gs.level + 1, status: $author$project$Main$Playing}
 						}),
 					$elm$core$Platform$Cmd$none);
 			default:
@@ -5393,23 +5358,11 @@ var $author$project$Main$update = F2(
 						{
 							dragDrop: model_,
 							gs: {
-								isCompleted: false,
 								level: model.gs.level,
-								status: (!model.gs.isCompleted) ? model.gs.status : $author$project$Main$Won
+								status: _Utils_eq(model.gs.status, $author$project$Main$Won) ? model.gs.status : $author$project$Main$Won
 							}
 						}),
-					A2(
-						$elm$core$Maybe$withDefault,
-						$elm$core$Platform$Cmd$none,
-						A2(
-							$elm$core$Maybe$map,
-							A2(
-								$elm$core$Basics$composeR,
-								function ($) {
-									return $.event;
-								},
-								$author$project$Main$dragstart),
-							$norpan$elm_html5_drag_drop$Html5$DragDrop$getDragstartEvent(msg_))));
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$Exit = {$: 'Exit'};
@@ -5424,6 +5377,7 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -5443,13 +5397,13 @@ var $elm$html$Html$Events$onClick = function (msg) {
 };
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Main$button = F2(
+var $author$project$Main$menuButton = F2(
 	function (clickMsg, content) {
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class('button'),
+					$elm$html$Html$Attributes$class('menu-button'),
 					$elm$html$Html$Events$onClick(clickMsg)
 				]),
 			_List_fromArray(
@@ -5457,12 +5411,6 @@ var $author$project$Main$button = F2(
 					$elm$html$Html$text(content)
 				]));
 	});
-var $author$project$Main$buttons = $elm$html$Html$div(
-	_List_fromArray(
-		[
-			$elm$html$Html$Attributes$class('buttons')
-		]));
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $author$project$Main$viewHomePage = A2(
 	$elm$html$Html$div,
 	_List_fromArray(
@@ -5489,11 +5437,16 @@ var $author$project$Main$viewHomePage = A2(
 						[
 							$elm$html$Html$text('Tangram')
 						])),
-					$author$project$Main$buttons(
+					A2(
+					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							A2($author$project$Main$button, $author$project$Main$Play, 'PLAY'),
-							A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
+							$elm$html$Html$Attributes$class('buttons')
+						]),
+					_List_fromArray(
+						[
+							A2($author$project$Main$menuButton, $author$project$Main$Play, 'PLAY'),
+							A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
 						]))
 				]))
 		]));
@@ -5920,7 +5873,7 @@ var $author$project$Main$gridArea = function (level) {
 			case 1:
 				return _Utils_Tuple2(1, 3);
 			case 2:
-				return _Utils_Tuple2(4, 2);
+				return _Utils_Tuple2(4, 3);
 			default:
 				return _Utils_Tuple2(0, 0);
 		}
@@ -6019,7 +5972,7 @@ var $author$project$Main$puzzleArea = function (level) {
 						$elm$html$Html$img,
 						A2(
 							$elm$core$List$cons,
-							$elm$html$Html$Attributes$src('assets/puzzles/one.png'),
+							$elm$html$Html$Attributes$src('assets/puzzles/seven.png'),
 							A2(
 								$elm$core$List$cons,
 								$elm$html$Html$Attributes$width(120),
@@ -6029,7 +5982,7 @@ var $author$project$Main$puzzleArea = function (level) {
 						$elm$html$Html$img,
 						A2(
 							$elm$core$List$cons,
-							$elm$html$Html$Attributes$src('assets/puzzles/one.png'),
+							$elm$html$Html$Attributes$src('assets/puzzles/seven.png'),
 							A2(
 								$elm$core$List$cons,
 								$elm$html$Html$Attributes$width(120),
@@ -6060,7 +6013,8 @@ var $author$project$Main$viewPlayArea = function (level) {
 		_List_fromArray(
 			[
 				$author$project$Main$puzzleArea(level),
-				$author$project$Main$gridArea(level)
+				$author$project$Main$gridArea(level),
+				A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
 			]));
 };
 var $author$project$Main$view = function (model) {
