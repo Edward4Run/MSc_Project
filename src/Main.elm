@@ -7,7 +7,6 @@ import Html.Events exposing (onClick)
 import Html5.DragDrop as DragDrop
 import Json.Decode exposing (Value)
 import Array exposing (Array)
-import View.Puzzles as Puzzles
 
 
 -- MAIN
@@ -36,10 +35,10 @@ type Status
     | Playing
     | Won
 
-type Position
-  = Left
-  | Right
-
+type alias Position =
+  { x : Int
+  , y : Int
+  }
 
 -- INIT
 
@@ -89,7 +88,7 @@ update msg model =
 
 -- SUB
 subscriptions : Model -> Sub Msg
-subscriptions model=
+subscriptions model =
   Sub.none
 
 
@@ -142,14 +141,14 @@ puzzleArea level =
           [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) [] ]
 
         2 ->
-          [ img (src "assets/puzzles/seven.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) []
-          , img (src "assets/puzzles/seven.png" :: width 120 :: DragDrop.draggable DragDropMsg 2) [] ]
+          [ img (src "assets/puzzles/seven.png" :: width 80 :: DragDrop.draggable DragDropMsg 1) []
+          , img (src "assets/puzzles/seven.png" :: width 80 :: DragDrop.draggable DragDropMsg 2) [] ]
 
         _ ->
           [ ]
   in
   div ([ class "puzzleArea" ]
-      ++ DragDrop.droppable DragDropMsg Left
+      ++ DragDrop.droppable DragDropMsg {x=-1, y=-1}
       )
       puzzles
 
@@ -159,41 +158,48 @@ gridArea level =
     ( width_, height_ ) =
       case level of
           1 -> (1, 3)
-          2 -> (4, 3)
+          2 -> (2, 4)
           _ -> (0, 0)
   in
-  toIndexed2dList width_ height_
-    |> List.map 
-        (List.map
-                  (\a ->
-                      square a
-                  )
-        )
-    |> List.map (div [ class "grid-column" ])
-    |> container
+  div [ class "gridArea" ]
+      [ toIndexed2dList width_ height_
+          |> List.map 
+              (List.map
+                        (\(a, b) ->
+                            square (a, b)
+                        )
+              )
+          |> List.map (div [ ])
+          |> container
+      ]
 
-square : Int -> Html Msg
-square a = 
-  div ([ class "square" ]
-      ++ DragDrop.droppable DragDropMsg Right
+square : (Int, Int) -> Html Msg
+square (a, b) = 
+  span ([ class "square" ]
+      ++ DragDrop.droppable DragDropMsg {x=a, y=b}
       )
-        [ ]
+        [ text nonBreakingSpace ]
+
+nonBreakingSpace : String
+nonBreakingSpace =
+    Char.fromCode 160 |> String.fromChar
+
 
 container : List (Html Msg) -> Html Msg
 container =
-    div [ class "gridArea" ]
+  div [ ]
+
         
 
-toIndexed2dList : Int -> Int -> List (List Int)
+toIndexed2dList : Int -> Int -> List (List (Int,Int))
 toIndexed2dList width height =
     List.range 0 height
-        |> List.foldl
+        |> List.foldr
             (\y result ->
-                (Array.repeat (width * height) 1
+                (Array.initialize (width * height) (\n -> (n // width, remainderBy width n))
                     |> Array.slice (width * y) (width * y + width)
                     |> Array.toList
                 )
                     :: result
             )
             []
-

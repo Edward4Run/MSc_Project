@@ -5450,15 +5450,10 @@ var $author$project$Main$viewHomePage = A2(
 						]))
 				]))
 		]));
-var $author$project$Main$container = $elm$html$Html$div(
-	_List_fromArray(
-		[
-			$elm$html$Html$Attributes$class('gridArea')
-		]));
+var $author$project$Main$container = $elm$html$Html$div(_List_Nil);
 var $author$project$Main$DragDropMsg = function (a) {
 	return {$: 'DragDropMsg', a: a};
 };
-var $author$project$Main$Right = {$: 'Right'};
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnter = function (a) {
 	return {$: 'DragEnter', a: a};
 };
@@ -5595,26 +5590,33 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$droppable = F2(
 					$norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder))
 			]);
 	});
-var $author$project$Main$square = function (a) {
+var $elm$core$String$cons = _String_cons;
+var $elm$core$String$fromChar = function (_char) {
+	return A2($elm$core$String$cons, _char, '');
+};
+var $elm$core$Char$fromCode = _Char_fromCode;
+var $author$project$Main$nonBreakingSpace = $elm$core$String$fromChar(
+	$elm$core$Char$fromCode(160));
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $author$project$Main$square = function (_v0) {
+	var a = _v0.a;
+	var b = _v0.b;
 	return A2(
-		$elm$html$Html$div,
+		$elm$html$Html$span,
 		_Utils_ap(
 			_List_fromArray(
 				[
 					$elm$html$Html$Attributes$class('square')
 				]),
-			A2($norpan$elm_html5_drag_drop$Html5$DragDrop$droppable, $author$project$Main$DragDropMsg, $author$project$Main$Right)),
-		_List_Nil);
+			A2(
+				$norpan$elm_html5_drag_drop$Html5$DragDrop$droppable,
+				$author$project$Main$DragDropMsg,
+				{x: a, y: b})),
+		_List_fromArray(
+			[
+				$elm$html$Html$text($author$project$Main$nonBreakingSpace)
+			]));
 };
-var $elm$core$Array$repeat = F2(
-	function (n, e) {
-		return A2(
-			$elm$core$Array$initialize,
-			n,
-			function (_v0) {
-				return e;
-			});
-	});
 var $elm$core$Elm$JsArray$appendN = _JsArray_appendN;
 var $elm$core$Elm$JsArray$slice = _JsArray_slice;
 var $elm$core$Array$appendHelpBuilder = F2(
@@ -5851,7 +5853,7 @@ var $elm$core$Array$slice = F3(
 var $author$project$Main$toIndexed2dList = F2(
 	function (width, height) {
 		return A3(
-			$elm$core$List$foldl,
+			$elm$core$List$foldr,
 			F2(
 				function (y, result) {
 					return A2(
@@ -5861,7 +5863,12 @@ var $author$project$Main$toIndexed2dList = F2(
 								$elm$core$Array$slice,
 								width * y,
 								(width * y) + width,
-								A2($elm$core$Array$repeat, width * height, 1))),
+								A2(
+									$elm$core$Array$initialize,
+									width * height,
+									function (n) {
+										return _Utils_Tuple2((n / width) | 0, n % width);
+									}))),
 						result);
 				}),
 			_List_Nil,
@@ -5873,30 +5880,37 @@ var $author$project$Main$gridArea = function (level) {
 			case 1:
 				return _Utils_Tuple2(1, 3);
 			case 2:
-				return _Utils_Tuple2(4, 3);
+				return _Utils_Tuple2(2, 4);
 			default:
 				return _Utils_Tuple2(0, 0);
 		}
 	}();
 	var width_ = _v0.a;
 	var height_ = _v0.b;
-	return $author$project$Main$container(
-		A2(
-			$elm$core$List$map,
-			$elm$html$Html$div(
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('grid-column')
-					])),
-			A2(
-				$elm$core$List$map,
-				$elm$core$List$map(
-					function (a) {
-						return $author$project$Main$square(a);
-					}),
-				A2($author$project$Main$toIndexed2dList, width_, height_))));
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('gridArea')
+			]),
+		_List_fromArray(
+			[
+				$author$project$Main$container(
+				A2(
+					$elm$core$List$map,
+					$elm$html$Html$div(_List_Nil),
+					A2(
+						$elm$core$List$map,
+						$elm$core$List$map(
+							function (_v2) {
+								var a = _v2.a;
+								var b = _v2.b;
+								return $author$project$Main$square(
+									_Utils_Tuple2(a, b));
+							}),
+						A2($author$project$Main$toIndexed2dList, width_, height_))))
+			]));
 };
-var $author$project$Main$Left = {$: 'Left'};
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnd = {$: 'DragEnd'};
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragStart = F2(
 	function (a, b) {
@@ -5936,6 +5950,9 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$draggable = F2(
 			]);
 	});
 var $elm$html$Html$img = _VirtualDom_node('img');
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
 var $elm$html$Html$Attributes$src = function (url) {
 	return A2(
 		$elm$html$Html$Attributes$stringProperty,
@@ -5975,7 +5992,7 @@ var $author$project$Main$puzzleArea = function (level) {
 							$elm$html$Html$Attributes$src('assets/puzzles/seven.png'),
 							A2(
 								$elm$core$List$cons,
-								$elm$html$Html$Attributes$width(120),
+								$elm$html$Html$Attributes$width(80),
 								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1))),
 						_List_Nil),
 						A2(
@@ -5985,7 +6002,7 @@ var $author$project$Main$puzzleArea = function (level) {
 							$elm$html$Html$Attributes$src('assets/puzzles/seven.png'),
 							A2(
 								$elm$core$List$cons,
-								$elm$html$Html$Attributes$width(120),
+								$elm$html$Html$Attributes$width(80),
 								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 2))),
 						_List_Nil)
 					]);
@@ -6000,7 +6017,10 @@ var $author$project$Main$puzzleArea = function (level) {
 				[
 					$elm$html$Html$Attributes$class('puzzleArea')
 				]),
-			A2($norpan$elm_html5_drag_drop$Html5$DragDrop$droppable, $author$project$Main$DragDropMsg, $author$project$Main$Left)),
+			A2(
+				$norpan$elm_html5_drag_drop$Html5$DragDrop$droppable,
+				$author$project$Main$DragDropMsg,
+				{x: -1, y: -1})),
 		puzzles);
 };
 var $author$project$Main$viewPlayArea = function (level) {

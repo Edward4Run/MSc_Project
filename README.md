@@ -1,4 +1,4 @@
-# MSc_Project
+# Elm-tangram
 
 ## Description of the Tangram game
 ### List of characterizations:
