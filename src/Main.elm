@@ -1,12 +1,17 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, h1, text, img, span)
-import Html.Attributes exposing (src, width, class)
-import Html.Events exposing (onClick)
+import Html exposing (Html, Attribute, div, h1, text, img, span)
+import Html.Attributes exposing (src, width, class, style)
+import Html.Events exposing (onClick, custom)
+import Svg as S
+import Svg.Attributes as SA
 import Html5.DragDrop as DragDrop
-import Json.Decode exposing (Value)
 import Array exposing (Array)
+import View.Puzzles as Puzzles
+import Json.Decode exposing (succeed)
+import Css exposing (Position)
+import Debug exposing (toString, log)
 
 
 -- MAIN
@@ -22,12 +27,13 @@ main =
 -- MODEL
 type alias Model =
   { gs : GameState
-  , dragDrop : DragDrop.Model Int Position
+  , dragDrop : DragDrop.Model Int Puzzles.Position
   }
 
 type alias GameState =
     { level : Int
     , status : Status
+    , puzzles : List Puzzle
     }
 
 type Status
@@ -35,18 +41,36 @@ type Status
     | Playing
     | Won
 
-type alias Position =
-  { x : Int
-  , y : Int
+type alias Puzzle =
+  { image : Html Msg
+  , imageRotation : Int
+  , shape : Shape
+  , position : Puzzles.Position
   }
+
+type alias Shape =
+  { right : Int
+  , left : Int
+  , up : Int
+  , down : Int
+  }
+
 
 -- INIT
 
 init : () -> ( Model, Cmd Msg )
 init _ = ( { gs = { level = 2
-                  , status = HomePage }
+                  , status = HomePage
+                  , puzzles = puzzlesinitial }
             , dragDrop = DragDrop.init}
           , Cmd.none )
+
+puzzlesinitial : List Puzzle
+puzzlesinitial =
+  [{image = seven 0 1
+  , imageRotation = 0
+  , shape = { right = 1, left = 0, up = 0, down = 2 }
+  , position = { x = -1, y = -1 }}]
 
 
 -- UPDATE
@@ -54,33 +78,42 @@ type Msg
   = Play
   | Exit
   | Next
-  | DragDropMsg (DragDrop.Msg Int Position)
+  | DragDropMsg (DragDrop.Msg Int Puzzles.Position)
+  | RotateImage Int
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
     Play ->
       ( { model | gs = { level = model.gs.level
-                        , status = Playing } }, Cmd.none )
+                        , status = Playing
+                        , puzzles = model.gs.puzzles } }, Cmd.none )
     Exit ->
       ( { model | gs = { level = model.gs.level
-                        , status = HomePage} }, Cmd.none )
+                        , status = HomePage
+                        , puzzles = model.gs.puzzles } }, Cmd.none )
     Next ->
       ( { model | gs = { level = model.gs.level + 1
-                        , status = Playing } }, Cmd.none)
+                        , status = Playing
+                        , puzzles = model.gs.puzzles } }, Cmd.none)
+    RotateImage msg_ ->
+      ( { model | gs = { level = model.gs.level
+                        , status = Playing
+                        , puzzles = model.gs.puzzles } }, Cmd.none)
     DragDropMsg msg_ ->
       let
         ( model_, result ) =
             DragDrop.update msg_ model.dragDrop
-      in
-        ( { model
+      in 
+        log (toString msg_) ( { model
             | dragDrop = model_
             , gs = { status = 
                       if model.gs.status == Won then
                           model.gs.status
                       else
                           Won
-                      , level = model.gs.level}
+                      , level = model.gs.level
+                      , puzzles = model.gs.puzzles }
           }
         , Cmd.none
         )
@@ -99,9 +132,9 @@ view model =
     HomePage ->
       viewHomePage
     Playing ->
-      viewPlayArea model.gs.level
+      viewPlayArea model
     Won ->
-      viewPlayArea model.gs.level
+      viewPlayArea model
 
 
 -- Homepage View
@@ -115,42 +148,21 @@ viewHomePage =
                   , menuButton Exit "EXIT" ] ]
       ]
 
-menuButton : Msg -> String -> Html Msg
-menuButton clickMsg content =
-  div
-    [ class "menu-button"
-    , onClick clickMsg
-    ]
-    [ text content ]
 
 
 -- PlayArea View
-viewPlayArea : Int -> Html Msg
-viewPlayArea level = 
+viewPlayArea : Model -> Html Msg
+viewPlayArea model = 
   div [ class "background" ]
-      [ puzzleArea level
-      , gridArea level
-      , menuButton Exit "EXIT" ]
+      [ puzzleArea model.gs
+      , gridArea model.gs.level ]
 
-puzzleArea : Int -> Html Msg
-puzzleArea level = 
-  let
-    puzzles = 
-      case level of
-        1 ->
-          [ img (src "assets/puzzles/one.png" :: width 120 :: DragDrop.draggable DragDropMsg 1) [] ]
-
-        2 ->
-          [ img (src "assets/puzzles/seven.png" :: width 80 :: DragDrop.draggable DragDropMsg 1) []
-          , img (src "assets/puzzles/seven.png" :: width 80 :: DragDrop.draggable DragDropMsg 2) [] ]
-
-        _ ->
-          [ ]
-  in
-  div ([ class "puzzleArea" ]
+-- haven't finished
+puzzleArea : GameState -> Html Msg
+puzzleArea gs =
+  List.map (div ([ class "puzzleArea" ]
       ++ DragDrop.droppable DragDropMsg {x=-1, y=-1}
-      )
-      puzzles
+      )) gs.puzzles
 
 gridArea : Int -> Html Msg
 gridArea level = 
@@ -174,11 +186,11 @@ gridArea level =
       ]
 
 square : (Int, Int) -> Html Msg
-square (a, b) = 
+square (a, b) =
   span ([ class "square" ]
       ++ DragDrop.droppable DragDropMsg {x=a, y=b}
       )
-        [ text nonBreakingSpace ]
+        [ text ("(" ++ String.fromInt(a) ++ ", " ++ String.fromInt(b) ++ ")") ]
 
 nonBreakingSpace : String
 nonBreakingSpace =
@@ -188,8 +200,6 @@ nonBreakingSpace =
 container : List (Html Msg) -> Html Msg
 container =
   div [ ]
-
-        
 
 toIndexed2dList : Int -> Int -> List (List (Int,Int))
 toIndexed2dList width height =
@@ -203,3 +213,40 @@ toIndexed2dList width height =
                     :: result
             )
             []
+
+-- BUTTONS
+menuButton : Msg -> String -> Html Msg
+menuButton clickMsg content =
+  div
+    [ class "menu-button"
+    , onClick clickMsg
+    ]
+    [ text content ]
+
+onRightClick : msg -> Attribute msg
+onRightClick msg =
+    custom
+        "contextmenu"
+        (succeed
+            { stopPropagation = True
+            , preventDefault = True
+            , message = msg
+            }
+        )
+
+--PUZZLES
+seven : Int -> Int -> Html Msg
+seven rotation id = 
+    S.svg ([ SA.width "80"
+          , SA.height "120"
+          , SA.viewBox "0 0 80 120"
+          , SA.style "stroke: currentColor;"
+          , style "transition" "transform 0.5s"
+          , style "transform" ("rotate(" ++ String.fromInt rotation ++ "deg)")
+          , onClick (RotateImage id) ]
+          ++ DragDrop.draggable DragDropMsg id)
+          [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
+          , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
+          , S.rect [ SA.x "0", SA.y "40", SA.width "40", SA.height "40" ] []
+          , S.rect [ SA.x "0", SA.y "80", SA.width "40", SA.height "40" ] []
+          ]

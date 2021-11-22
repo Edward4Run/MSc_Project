@@ -5190,7 +5190,7 @@ var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			dragDrop: $norpan$elm_html5_drag_drop$Html5$DragDrop$init,
-			gs: {level: 2, status: $author$project$Main$HomePage}
+			gs: {imageRotation1: 0, imageRotation2: 0, level: 2, status: $author$project$Main$HomePage}
 		},
 		$elm$core$Platform$Cmd$none);
 };
@@ -5201,6 +5201,8 @@ var $author$project$Main$subscriptions = function (model) {
 };
 var $author$project$Main$Playing = {$: 'Playing'};
 var $author$project$Main$Won = {$: 'Won'};
+var $elm$core$Debug$log = _Debug_log;
+var $elm$core$Debug$toString = _Debug_toString;
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver = F4(
 	function (a, b, c, d) {
 		return {$: 'DraggedOver', a: a, b: b, c: c, d: d};
@@ -5328,7 +5330,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {level: model.gs.level, status: $author$project$Main$Playing}
+							gs: {imageRotation1: model.gs.imageRotation1, imageRotation2: model.gs.imageRotation2, level: model.gs.level, status: $author$project$Main$Playing}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Exit':
@@ -5336,7 +5338,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {level: model.gs.level, status: $author$project$Main$HomePage}
+							gs: {imageRotation1: model.gs.imageRotation1, imageRotation2: model.gs.imageRotation2, level: model.gs.level, status: $author$project$Main$HomePage}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Next':
@@ -5344,7 +5346,23 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {level: model.gs.level + 1, status: $author$project$Main$Playing}
+							gs: {imageRotation1: model.gs.imageRotation1, imageRotation2: model.gs.imageRotation2, level: model.gs.level + 1, status: $author$project$Main$Playing}
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'RotateImage1':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							gs: {imageRotation1: model.gs.imageRotation1 + 90, imageRotation2: model.gs.imageRotation2, level: model.gs.level, status: $author$project$Main$Playing}
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'RotateImage2':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							gs: {imageRotation1: model.gs.imageRotation1, imageRotation2: model.gs.imageRotation2 + 90, level: model.gs.level, status: $author$project$Main$Playing}
 						}),
 					$elm$core$Platform$Cmd$none);
 			default:
@@ -5352,17 +5370,22 @@ var $author$project$Main$update = F2(
 				var _v1 = A2($norpan$elm_html5_drag_drop$Html5$DragDrop$update, msg_, model.dragDrop);
 				var model_ = _v1.a;
 				var result = _v1.b;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							dragDrop: model_,
-							gs: {
-								level: model.gs.level,
-								status: _Utils_eq(model.gs.status, $author$project$Main$Won) ? model.gs.status : $author$project$Main$Won
-							}
-						}),
-					$elm$core$Platform$Cmd$none);
+				return A2(
+					$elm$core$Debug$log,
+					$elm$core$Debug$toString(msg_),
+					_Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								dragDrop: model_,
+								gs: {
+									imageRotation1: model.gs.imageRotation1,
+									imageRotation2: model.gs.imageRotation2,
+									level: model.gs.level,
+									status: _Utils_eq(model.gs.status, $author$project$Main$Won) ? model.gs.status : $author$project$Main$Won
+								}
+							}),
+						$elm$core$Platform$Cmd$none));
 		}
 	});
 var $author$project$Main$Exit = {$: 'Exit'};
@@ -5450,7 +5473,6 @@ var $author$project$Main$viewHomePage = A2(
 						]))
 				]))
 		]));
-var $author$project$Main$container = $elm$html$Html$div(_List_Nil);
 var $author$project$Main$DragDropMsg = function (a) {
 	return {$: 'DragDropMsg', a: a};
 };
@@ -5590,31 +5612,27 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$droppable = F2(
 					$norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder))
 			]);
 	});
-var $elm$core$String$cons = _String_cons;
-var $elm$core$String$fromChar = function (_char) {
-	return A2($elm$core$String$cons, _char, '');
-};
-var $elm$core$Char$fromCode = _Char_fromCode;
-var $author$project$Main$nonBreakingSpace = $elm$core$String$fromChar(
-	$elm$core$Char$fromCode(160));
+var $author$project$Main$container = $elm$html$Html$div(
+	_Utils_ap(
+		_List_Nil,
+		A2(
+			$norpan$elm_html5_drag_drop$Html5$DragDrop$droppable,
+			$author$project$Main$DragDropMsg,
+			{x: 1, y: 1})));
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $author$project$Main$square = function (_v0) {
 	var a = _v0.a;
 	var b = _v0.b;
 	return A2(
 		$elm$html$Html$span,
-		_Utils_ap(
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('square')
-				]),
-			A2(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$droppable,
-				$author$project$Main$DragDropMsg,
-				{x: a, y: b})),
 		_List_fromArray(
 			[
-				$elm$html$Html$text($author$project$Main$nonBreakingSpace)
+				$elm$html$Html$Attributes$class('square')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text(
+				'(' + ($elm$core$String$fromInt(a) + (', ' + ($elm$core$String$fromInt(b) + ')'))))
 			]));
 };
 var $elm$core$Elm$JsArray$appendN = _JsArray_appendN;
@@ -5911,6 +5929,8 @@ var $author$project$Main$gridArea = function (level) {
 						A2($author$project$Main$toIndexed2dList, width_, height_))))
 			]));
 };
+var $author$project$Main$RotateImage1 = {$: 'RotateImage1'};
+var $author$project$Main$RotateImage2 = {$: 'RotateImage2'};
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnd = {$: 'DragEnd'};
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragStart = F2(
 	function (a, b) {
@@ -5949,81 +5969,222 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$draggable = F2(
 					wrap($norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnd)))
 			]);
 	});
+var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
 var $elm$html$Html$img = _VirtualDom_node('img');
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
+var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
 var $elm$html$Html$Attributes$src = function (url) {
 	return A2(
 		$elm$html$Html$Attributes$stringProperty,
 		'src',
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
+var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
+var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var $elm$html$Html$Attributes$width = function (n) {
 	return A2(
 		_VirtualDom_attribute,
 		'width',
 		$elm$core$String$fromInt(n));
 };
-var $author$project$Main$puzzleArea = function (level) {
-	var puzzles = function () {
-		switch (level) {
-			case 1:
-				return _List_fromArray(
+var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
+var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
+var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
+var $author$project$Main$puzzleArea = F2(
+	function (level, gs) {
+		var puzzles = function () {
+			switch (level) {
+				case 1:
+					return _List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick($author$project$Main$RotateImage1)
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$img,
+									_Utils_ap(
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$src('assets/puzzles/one.png'),
+												$elm$html$Html$Attributes$width(120),
+												A2(
+												$elm$html$Html$Attributes$style,
+												'transform',
+												'rotate(' + ($elm$core$String$fromInt(gs.imageRotation1) + 'deg)'))
+											]),
+										A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1)),
+									_List_Nil)
+								]))
+						]);
+				case 2:
+					return _List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_Utils_ap(
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onClick($author$project$Main$RotateImage1)
+									]),
+								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1)),
+							_List_fromArray(
+								[
+									A2(
+									$elm$svg$Svg$svg,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$width('80'),
+											$elm$svg$Svg$Attributes$height('120'),
+											$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
+											$elm$svg$Svg$Attributes$style('stroke: currentColor;'),
+											A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
+											A2(
+											$elm$html$Html$Attributes$style,
+											'transform',
+											'rotate(' + ($elm$core$String$fromInt(gs.imageRotation1) + 'deg)'))
+										]),
+									_List_fromArray(
+										[
+											A2(
+											$elm$svg$Svg$rect,
+											_List_fromArray(
+												[
+													$elm$svg$Svg$Attributes$x('0'),
+													$elm$svg$Svg$Attributes$y('0'),
+													$elm$svg$Svg$Attributes$width('40'),
+													$elm$svg$Svg$Attributes$height('40')
+												]),
+											_List_Nil),
+											A2(
+											$elm$svg$Svg$rect,
+											_List_fromArray(
+												[
+													$elm$svg$Svg$Attributes$x('40'),
+													$elm$svg$Svg$Attributes$y('0'),
+													$elm$svg$Svg$Attributes$width('40'),
+													$elm$svg$Svg$Attributes$height('40')
+												]),
+											_List_Nil),
+											A2(
+											$elm$svg$Svg$rect,
+											_List_fromArray(
+												[
+													$elm$svg$Svg$Attributes$x('0'),
+													$elm$svg$Svg$Attributes$y('40'),
+													$elm$svg$Svg$Attributes$width('40'),
+													$elm$svg$Svg$Attributes$height('40')
+												]),
+											_List_Nil),
+											A2(
+											$elm$svg$Svg$rect,
+											_List_fromArray(
+												[
+													$elm$svg$Svg$Attributes$x('0'),
+													$elm$svg$Svg$Attributes$y('80'),
+													$elm$svg$Svg$Attributes$width('40'),
+													$elm$svg$Svg$Attributes$height('40')
+												]),
+											_List_Nil)
+										]))
+								])),
+							A2(
+							$elm$html$Html$div,
+							_Utils_ap(
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onClick($author$project$Main$RotateImage2)
+									]),
+								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 2)),
+							_List_fromArray(
+								[
+									A2(
+									$elm$svg$Svg$svg,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$width('80'),
+											$elm$svg$Svg$Attributes$height('120'),
+											$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
+											$elm$svg$Svg$Attributes$style('stroke: currentColor;'),
+											A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
+											A2(
+											$elm$html$Html$Attributes$style,
+											'transform',
+											'rotate(' + ($elm$core$String$fromInt(gs.imageRotation2) + 'deg)'))
+										]),
+									_List_fromArray(
+										[
+											A2(
+											$elm$svg$Svg$rect,
+											_List_fromArray(
+												[
+													$elm$svg$Svg$Attributes$x('0'),
+													$elm$svg$Svg$Attributes$y('0'),
+													$elm$svg$Svg$Attributes$width('40'),
+													$elm$svg$Svg$Attributes$height('40')
+												]),
+											_List_Nil),
+											A2(
+											$elm$svg$Svg$rect,
+											_List_fromArray(
+												[
+													$elm$svg$Svg$Attributes$x('40'),
+													$elm$svg$Svg$Attributes$y('0'),
+													$elm$svg$Svg$Attributes$width('40'),
+													$elm$svg$Svg$Attributes$height('40')
+												]),
+											_List_Nil),
+											A2(
+											$elm$svg$Svg$rect,
+											_List_fromArray(
+												[
+													$elm$svg$Svg$Attributes$x('0'),
+													$elm$svg$Svg$Attributes$y('40'),
+													$elm$svg$Svg$Attributes$width('40'),
+													$elm$svg$Svg$Attributes$height('40')
+												]),
+											_List_Nil),
+											A2(
+											$elm$svg$Svg$rect,
+											_List_fromArray(
+												[
+													$elm$svg$Svg$Attributes$x('0'),
+													$elm$svg$Svg$Attributes$y('80'),
+													$elm$svg$Svg$Attributes$width('40'),
+													$elm$svg$Svg$Attributes$height('40')
+												]),
+											_List_Nil)
+										]))
+								]))
+						]);
+				default:
+					return _List_Nil;
+			}
+		}();
+		return A2(
+			$elm$html$Html$div,
+			_Utils_ap(
+				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$img,
-						A2(
-							$elm$core$List$cons,
-							$elm$html$Html$Attributes$src('assets/puzzles/one.png'),
-							A2(
-								$elm$core$List$cons,
-								$elm$html$Html$Attributes$width(120),
-								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1))),
-						_List_Nil)
-					]);
-			case 2:
-				return _List_fromArray(
-					[
-						A2(
-						$elm$html$Html$img,
-						A2(
-							$elm$core$List$cons,
-							$elm$html$Html$Attributes$src('assets/puzzles/seven.png'),
-							A2(
-								$elm$core$List$cons,
-								$elm$html$Html$Attributes$width(80),
-								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1))),
-						_List_Nil),
-						A2(
-						$elm$html$Html$img,
-						A2(
-							$elm$core$List$cons,
-							$elm$html$Html$Attributes$src('assets/puzzles/seven.png'),
-							A2(
-								$elm$core$List$cons,
-								$elm$html$Html$Attributes$width(80),
-								A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 2))),
-						_List_Nil)
-					]);
-			default:
-				return _List_Nil;
-		}
-	}();
-	return A2(
-		$elm$html$Html$div,
-		_Utils_ap(
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('puzzleArea')
-				]),
-			A2(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$droppable,
-				$author$project$Main$DragDropMsg,
-				{x: -1, y: -1})),
-		puzzles);
-};
-var $author$project$Main$viewPlayArea = function (level) {
+						$elm$html$Html$Attributes$class('puzzleArea')
+					]),
+				A2(
+					$norpan$elm_html5_drag_drop$Html5$DragDrop$droppable,
+					$author$project$Main$DragDropMsg,
+					{x: -1, y: -1})),
+			puzzles);
+	});
+var $author$project$Main$viewPlayArea = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -6032,9 +6193,8 @@ var $author$project$Main$viewPlayArea = function (level) {
 			]),
 		_List_fromArray(
 			[
-				$author$project$Main$puzzleArea(level),
-				$author$project$Main$gridArea(level),
-				A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
+				A2($author$project$Main$puzzleArea, model.gs.level, model.gs),
+				$author$project$Main$gridArea(model.gs.level)
 			]));
 };
 var $author$project$Main$view = function (model) {
@@ -6043,9 +6203,9 @@ var $author$project$Main$view = function (model) {
 		case 'HomePage':
 			return $author$project$Main$viewHomePage;
 		case 'Playing':
-			return $author$project$Main$viewPlayArea(model.gs.level);
+			return $author$project$Main$viewPlayArea(model);
 		default:
-			return $author$project$Main$viewPlayArea(model.gs.level);
+			return $author$project$Main$viewPlayArea(model);
 	}
 };
 var $author$project$Main$main = $elm$browser$Browser$element(

@@ -1,11 +1,15 @@
 module View.Puzzles exposing (..)
 
-import Html exposing (Html)
+import Html exposing (Html, Attribute)
 import Svg exposing (circle, ellipse, line, svg, rect)
 import Svg.Attributes exposing (..)
-import Svg.Events exposing (onMouseUp)
-import Draggable exposing (Msg)
 
+
+type alias Position =
+  { x : Int
+  , y : Int
+  }
+  
 arrowUp : Html msg
 arrowUp =
     svg

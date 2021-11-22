@@ -71,5 +71,9 @@ h1.title {
     align-items: center;
     justify-content: center;
     background-color: #FFFFFF;
-    border: 1px solid black;
+    border: 1px solid #CCCCCC;
+}
+
+.img-rotate {
+    transform: rotate(90deg);
 }
