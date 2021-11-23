@@ -14,9 +14,6 @@
   var app = Elm.Main.init({
     node: document.getElementById('tangram')
   });
-  app.ports.dragstart.subscribe(function (event) {
-    event.dataTransfer.setData('text', '');
-  });
   </script>
 </body>
 </html>

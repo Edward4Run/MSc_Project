@@ -1,16 +1,14 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, Attribute, div, h1, text, img, span)
+import Html exposing (Html, div, h1, text, span)
 import Html.Attributes exposing (src, width, class, style)
-import Html.Events exposing (onClick, custom)
+import Html.Events exposing (onClick)
 import Svg as S
 import Svg.Attributes as SA
 import Html5.DragDrop as DragDrop
 import Array exposing (Array)
 import View.Puzzles as Puzzles
-import Json.Decode exposing (succeed)
-import Css exposing (Position)
 import Debug exposing (toString, log)
 
 
@@ -42,11 +40,19 @@ type Status
     | Won
 
 type alias Puzzle =
-  { image : Html Msg
+  { id : Int
+  , image : ImageType
   , imageRotation : Int
   , shape : Shape
   , position : Puzzles.Position
   }
+
+type ImageType
+  = One
+  | Seven
+  | Four
+  | FourInLine
+  | Six
 
 type alias Shape =
   { right : Int
@@ -67,7 +73,13 @@ init _ = ( { gs = { level = 2
 
 puzzlesinitial : List Puzzle
 puzzlesinitial =
-  [{image = seven 0 1
+  [{ id = 1
+  , image = One
+  , imageRotation = 0
+  , shape = { right = 1, left = 0, up = 0, down = 2 }
+  , position = { x = -1, y = -1 }}
+  , { id = 2
+  , image = Seven
   , imageRotation = 0
   , shape = { right = 1, left = 0, up = 0, down = 2 }
   , position = { x = -1, y = -1 }}]
@@ -160,9 +172,10 @@ viewPlayArea model =
 -- haven't finished
 puzzleArea : GameState -> Html Msg
 puzzleArea gs =
-  List.map (div ([ class "puzzleArea" ]
+  div ([ class "puzzleArea" ]
       ++ DragDrop.droppable DragDropMsg {x=-1, y=-1}
-      )) gs.puzzles
+      )
+      (List.map viewPuzzle gs.puzzles)
 
 gridArea : Int -> Html Msg
 gridArea level = 
@@ -223,30 +236,49 @@ menuButton clickMsg content =
     ]
     [ text content ]
 
-onRightClick : msg -> Attribute msg
-onRightClick msg =
-    custom
-        "contextmenu"
-        (succeed
-            { stopPropagation = True
-            , preventDefault = True
-            , message = msg
-            }
-        )
 
 --PUZZLES
-seven : Int -> Int -> Html Msg
-seven rotation id = 
-    S.svg ([ SA.width "80"
-          , SA.height "120"
-          , SA.viewBox "0 0 80 120"
-          , SA.style "stroke: currentColor;"
-          , style "transition" "transform 0.5s"
-          , style "transform" ("rotate(" ++ String.fromInt rotation ++ "deg)")
-          , onClick (RotateImage id) ]
-          ++ DragDrop.draggable DragDropMsg id)
-          [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
-          , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
-          , S.rect [ SA.x "0", SA.y "40", SA.width "40", SA.height "40" ] []
-          , S.rect [ SA.x "0", SA.y "80", SA.width "40", SA.height "40" ] []
-          ]
+viewPuzzle : Puzzle -> Html Msg
+viewPuzzle puzzle =
+    S.svg
+        ([ SA.width "120"
+        , SA.height "120"
+        , SA.viewBox "0 0 80 120"
+        , SA.style "stroke: currentColor;"
+        , style "transition" "transform 0.5s"
+        , style "transform" ("rotate(" ++ String.fromInt puzzle.imageRotation ++ "deg)")
+        , onClick (RotateImage puzzle.id) ]
+        ++ DragDrop.draggable DragDropMsg 1 )
+        (case puzzle.image of
+          One ->
+            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "80", SA.y "0", SA.width "40", SA.height "40" ] []
+            ]
+          Seven ->
+            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "0", SA.y "40", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "0", SA.y "80", SA.width "40", SA.height "40" ] []
+            ]
+          Four ->
+            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "0", SA.y "40", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "40", SA.y "40", SA.width "40", SA.height "40" ] []
+            ]
+          FourInLine ->
+            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "80", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "120", SA.y "0", SA.width "40", SA.height "40" ] []
+            ]
+          Six ->
+            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "0", SA.y "40", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "40", SA.y "40", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "0", SA.y "80", SA.width "40", SA.height "40" ] []
+            , S.rect [ SA.x "40", SA.y "80", SA.width "40", SA.height "40" ] []
+            ]
+        )
