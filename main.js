@@ -5182,37 +5182,95 @@ var $elm$core$Task$perform = F2(
 	});
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$HomePage = {$: 'HomePage'};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging = {$: 'NotDragging'};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$init = $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging;
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Main$One = {$: 'One'};
-var $author$project$Main$Seven = {$: 'Seven'};
+var $elm$core$Array$repeat = F2(
+	function (n, e) {
+		return A2(
+			$elm$core$Array$initialize,
+			n,
+			function (_v0) {
+				return e;
+			});
+	});
+var $author$project$Game$Levels$Level1$generateGrid = {
+	size: _Utils_Tuple2(1, 3),
+	squares: A2(
+		$elm$core$Array$repeat,
+		3,
+		{
+			isCovered: false,
+			position: {x: 0, y: 0}
+		})
+};
+var $author$project$Game$Levels$Level2$generateGrid = {
+	size: _Utils_Tuple2(2, 4),
+	squares: A2(
+		$elm$core$Array$repeat,
+		8,
+		{
+			isCovered: false,
+			position: {x: 0, y: 0}
+		})
+};
+var $author$project$Game$GameRoute$generateLevelGrid = function (level) {
+	if (level === 1) {
+		return $author$project$Game$Levels$Level1$generateGrid;
+	} else {
+		return $author$project$Game$Levels$Level2$generateGrid;
+	}
+};
+var $author$project$Puzzles$One = {$: 'One'};
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var $author$project$Main$puzzlesinitial = _List_fromArray(
+var $author$project$Game$Levels$Level1$generatePuzzles = _List_fromArray(
 	[
 		{
 		id: 1,
-		image: $author$project$Main$One,
-		imageRotation: 0,
+		image: $author$project$Puzzles$One,
 		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 0, left: 1, right: 1, up: 0}
+	}
+	]);
+var $author$project$Puzzles$Seven = {$: 'Seven'};
+var $author$project$Game$Levels$Level2$generatePuzzles = _List_fromArray(
+	[
+		{
+		id: 1,
+		image: $author$project$Puzzles$Seven,
+		position: {x: -1, y: -1},
+		rotation: 0,
 		shape: {down: 2, left: 0, right: 1, up: 0}
 	},
 		{
 		id: 2,
-		image: $author$project$Main$Seven,
-		imageRotation: 0,
+		image: $author$project$Puzzles$Seven,
 		position: {x: -1, y: -1},
+		rotation: 0,
 		shape: {down: 2, left: 0, right: 1, up: 0}
 	}
 	]);
+var $author$project$Game$GameRoute$generateLevelPuzzles = function (level) {
+	if (level === 1) {
+		return $author$project$Game$Levels$Level1$generatePuzzles;
+	} else {
+		return $author$project$Game$Levels$Level2$generatePuzzles;
+	}
+};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging = {$: 'NotDragging'};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$init = $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging;
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			dragDrop: $norpan$elm_html5_drag_drop$Html5$DragDrop$init,
-			gs: {level: 2, puzzles: $author$project$Main$puzzlesinitial, status: $author$project$Main$HomePage}
+			gs: {
+				grid: $author$project$Game$GameRoute$generateLevelGrid(2),
+				level: 2,
+				puzzles: $author$project$Game$GameRoute$generateLevelPuzzles(2),
+				status: $author$project$Main$HomePage
+			}
 		},
 		$elm$core$Platform$Cmd$none);
 };
@@ -5222,7 +5280,6 @@ var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
 var $author$project$Main$Playing = {$: 'Playing'};
-var $author$project$Main$Won = {$: 'Won'};
 var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Debug$toString = _Debug_toString;
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver = F4(
@@ -5344,6 +5401,45 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$updateCommon = F3(
 		return _Utils_Tuple2(model, $elm$core$Maybe$Nothing);
 	});
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$update = $norpan$elm_html5_drag_drop$Html5$DragDrop$updateCommon(false);
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $author$project$Main$updatePuzzles = F3(
+	function (id, position, puzzles) {
+		return (_Utils_cmp(position.x, -1) > 0) ? A2(
+			$elm$core$List$filter,
+			function (a) {
+				return _Utils_eq(a.id, id);
+			},
+			puzzles) : puzzles;
+	});
+var $author$project$Main$updateGameSate = F3(
+	function (id, position, gs) {
+		return {
+			grid: gs.grid,
+			level: gs.level,
+			puzzles: A3($author$project$Main$updatePuzzles, id, position, gs.puzzles),
+			status: gs.status
+		};
+	});
+var $author$project$Main$updateRotation = F2(
+	function (puzzle, id) {
+		return {
+			id: puzzle.id,
+			image: puzzle.image,
+			position: puzzle.position,
+			rotation: _Utils_eq(puzzle.id, id) ? (puzzle.rotation + 90) : puzzle.rotation,
+			shape: _Utils_eq(puzzle.id, id) ? {down: puzzle.shape.right, left: puzzle.shape.down, right: puzzle.shape.up, up: puzzle.shape.left} : puzzle.shape
+		};
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5352,7 +5448,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Main$Playing}
+							gs: {grid: model.gs.grid, level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Main$Playing}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Exit':
@@ -5360,7 +5456,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Main$HomePage}
+							gs: {grid: model.gs.grid, level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Main$HomePage}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Next':
@@ -5368,7 +5464,12 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {level: model.gs.level + 1, puzzles: model.gs.puzzles, status: $author$project$Main$Playing}
+							gs: {
+								grid: $author$project$Game$GameRoute$generateLevelGrid(model.gs.level + 1),
+								level: model.gs.level + 1,
+								puzzles: $author$project$Game$GameRoute$generateLevelPuzzles(model.gs.level + 1),
+								status: $author$project$Main$Playing
+							}
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'RotateImage':
@@ -5377,7 +5478,17 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							gs: {level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Main$Playing}
+							gs: {
+								grid: model.gs.grid,
+								level: model.gs.level,
+								puzzles: A2(
+									$elm$core$List$map,
+									function (puzzle) {
+										return A2($author$project$Main$updateRotation, puzzle, msg_);
+									},
+									model.gs.puzzles),
+								status: $author$project$Main$Playing
+							}
 						}),
 					$elm$core$Platform$Cmd$none);
 			default:
@@ -5393,11 +5504,16 @@ var $author$project$Main$update = F2(
 							model,
 							{
 								dragDrop: model_,
-								gs: {
-									level: model.gs.level,
-									puzzles: model.gs.puzzles,
-									status: _Utils_eq(model.gs.status, $author$project$Main$Won) ? model.gs.status : $author$project$Main$Won
-								}
+								gs: function () {
+									if (result.$ === 'Nothing') {
+										return model.gs;
+									} else {
+										var _v3 = result.a;
+										var id = _v3.a;
+										var position = _v3.b;
+										return A3($author$project$Main$updateGameSate, id, position, model.gs);
+									}
+								}()
 							}),
 						$elm$core$Platform$Cmd$none));
 		}
@@ -5905,17 +6021,8 @@ var $author$project$Main$toIndexed2dList = F2(
 			_List_Nil,
 			A2($elm$core$List$range, 0, height));
 	});
-var $author$project$Main$gridArea = function (level) {
-	var _v0 = function () {
-		switch (level) {
-			case 1:
-				return _Utils_Tuple2(1, 3);
-			case 2:
-				return _Utils_Tuple2(2, 4);
-			default:
-				return _Utils_Tuple2(0, 0);
-		}
-	}();
+var $author$project$Main$gridArea = function (gs) {
+	var _v0 = gs.grid.size;
 	var width_ = _v0.a;
 	var height_ = _v0.b;
 	return A2(
@@ -5933,9 +6040,9 @@ var $author$project$Main$gridArea = function (level) {
 					A2(
 						$elm$core$List$map,
 						$elm$core$List$map(
-							function (_v2) {
-								var a = _v2.a;
-								var b = _v2.b;
+							function (_v1) {
+								var a = _v1.a;
+								var b = _v1.b;
 								return $author$project$Main$square(
 									_Utils_Tuple2(a, b));
 							}),
@@ -5996,258 +6103,266 @@ var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
 var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
 var $author$project$Main$viewPuzzle = function (puzzle) {
 	return A2(
-		$elm$svg$Svg$svg,
+		$elm$html$Html$div,
 		_Utils_ap(
 			_List_fromArray(
 				[
-					$elm$svg$Svg$Attributes$width('120'),
-					$elm$svg$Svg$Attributes$height('120'),
-					$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
-					$elm$svg$Svg$Attributes$style('stroke: currentColor;'),
-					A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
-					A2(
-					$elm$html$Html$Attributes$style,
-					'transform',
-					'rotate(' + ($elm$core$String$fromInt(puzzle.imageRotation) + 'deg)')),
 					$elm$html$Html$Events$onClick(
 					$author$project$Main$RotateImage(puzzle.id))
 				]),
-			A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, 1)),
-		function () {
-			var _v0 = puzzle.image;
-			switch (_v0.$) {
-				case 'One':
-					return _List_fromArray(
-						[
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
+			A2($norpan$elm_html5_drag_drop$Html5$DragDrop$draggable, $author$project$Main$DragDropMsg, puzzle.id)),
+		_List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$svg,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$width('120'),
+						$elm$svg$Svg$Attributes$height('120'),
+						$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
+						$elm$svg$Svg$Attributes$style('stroke: currentColor;'),
+						A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'transform',
+						'rotate(' + ($elm$core$String$fromInt(puzzle.rotation) + 'deg)'))
+					]),
+				function () {
+					var _v0 = puzzle.image;
+					switch (_v0.$) {
+						case 'One':
+							return _List_fromArray(
 								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('80'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil)
+								]);
+						case 'Seven':
+							return _List_fromArray(
 								[
-									$elm$svg$Svg$Attributes$x('40'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('40'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('80'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil)
+								]);
+						case 'Four':
+							return _List_fromArray(
 								[
-									$elm$svg$Svg$Attributes$x('80'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil)
-						]);
-				case 'Seven':
-					return _List_fromArray(
-						[
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('40'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('40'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil)
+								]);
+						case 'FourInLine':
+							return _List_fromArray(
 								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('80'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('120'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil)
+								]);
+						default:
+							return _List_fromArray(
 								[
-									$elm$svg$Svg$Attributes$x('40'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('40'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('80'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil)
-						]);
-				case 'Four':
-					return _List_fromArray(
-						[
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('40'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('40'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('40'),
-									$elm$svg$Svg$Attributes$y('40'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil)
-						]);
-				case 'FourInLine':
-					return _List_fromArray(
-						[
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('40'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('80'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('120'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil)
-						]);
-				default:
-					return _List_fromArray(
-						[
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('40'),
-									$elm$svg$Svg$Attributes$y('0'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('40'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('40'),
-									$elm$svg$Svg$Attributes$y('40'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('0'),
-									$elm$svg$Svg$Attributes$y('80'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil),
-							A2(
-							$elm$svg$Svg$rect,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x('40'),
-									$elm$svg$Svg$Attributes$y('80'),
-									$elm$svg$Svg$Attributes$width('40'),
-									$elm$svg$Svg$Attributes$height('40')
-								]),
-							_List_Nil)
-						]);
-			}
-		}());
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('40'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('40'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('80'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('80'),
+											$elm$svg$Svg$Attributes$width('40'),
+											$elm$svg$Svg$Attributes$height('40')
+										]),
+									_List_Nil)
+								]);
+					}
+				}())
+			]));
 };
 var $author$project$Main$puzzleArea = function (gs) {
 	return A2(
@@ -6273,7 +6388,7 @@ var $author$project$Main$viewPlayArea = function (model) {
 		_List_fromArray(
 			[
 				$author$project$Main$puzzleArea(model.gs),
-				$author$project$Main$gridArea(model.gs.level)
+				$author$project$Main$gridArea(model.gs)
 			]));
 };
 var $author$project$Main$view = function (model) {
