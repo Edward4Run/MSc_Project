@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html, div, h1, text, span)
-import Html.Attributes exposing (src, width, class, style)
+import Html.Attributes exposing (width, class, style)
 import Html.Events exposing (onClick)
 import Svg as S
 import Svg.Attributes as SA
@@ -11,7 +11,7 @@ import Array exposing (Array)
 import Game.GameRoute as GameRoute
 import Puzzles as Puzzles exposing (Puzzle, ImageType(..))
 import Debug exposing (toString, log)
-import Grid exposing (Grid, Square)
+import Grid exposing (Grid)
 import Puzzles exposing (Position)
 
 
@@ -130,10 +130,10 @@ updateGameSate id position gs =
 updatePuzzles : Int -> Position -> List Puzzle -> List Puzzle
 updatePuzzles id position puzzles =
   if position.x > -1 then
-    List.filter ( \a -> a.id == id ) puzzles
+    List.filter ( \a -> a.id /= id ) puzzles
   else
     puzzles
-    
+
 
 -- SUB
 subscriptions : Model -> Sub Msg
@@ -253,7 +253,6 @@ square (a, b) =
 nonBreakingSpace : String
 nonBreakingSpace =
     Char.fromCode 160 |> String.fromChar
-
 
 container : List (Html Msg) -> Html Msg
 container =

@@ -5412,12 +5412,13 @@ var $elm$core$List$filter = F2(
 			_List_Nil,
 			list);
 	});
+var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$Main$updatePuzzles = F3(
 	function (id, position, puzzles) {
 		return (_Utils_cmp(position.x, -1) > 0) ? A2(
 			$elm$core$List$filter,
 			function (a) {
-				return _Utils_eq(a.id, id);
+				return !_Utils_eq(a.id, id);
 			},
 			puzzles) : puzzles;
 	});
