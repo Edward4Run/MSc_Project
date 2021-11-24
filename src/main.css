@@ -8,6 +8,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 0;
 }
 
 h1.title {
@@ -61,8 +62,8 @@ h1.title {
     align-items: center;
     justify-content: center;
     border: 1px solid black;
+    margin: 20px;
 }
-
 
 .square {
     width: 40px;
@@ -73,6 +74,6 @@ h1.title {
     border: 1px solid #CCCCCC;
 }
 
-.img-rotate {
-    transform: rotate(90deg);
+.pop-up-window {
+    z-index: 100;
 }

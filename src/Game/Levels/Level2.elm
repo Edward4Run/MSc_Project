@@ -6,8 +6,10 @@ import Array exposing (Array)
 
 generateGrid : Grid
 generateGrid =
-    { squares = Array.repeat 8 { isCovered = False, position = { x = 0, y = 0 }}
-    , size = ( 2, 4 )}
+    { squares = Grid.genarateIndexedSquare 2 4
+    , width = 2
+    , height = 4
+    , count = 0 }
 
 generatePuzzles : List Puzzle
 generatePuzzles =

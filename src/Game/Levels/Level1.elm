@@ -9,8 +9,10 @@ import Html.Attributes exposing (height)
 
 generateGrid : Grid
 generateGrid =
-    { squares = Array.repeat 3 { isCovered = False, position = { x = 0, y = 0 }}
-    , size = ( 1, 3 )}
+    { squares = Grid.genarateIndexedSquare 1 3
+    , width = 1
+    , height = 3
+    , count = 0 }
 
 generatePuzzles : List Puzzle
 generatePuzzles =

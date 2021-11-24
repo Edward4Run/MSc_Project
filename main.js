@@ -5181,590 +5181,7 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$HomePage = {$: 'HomePage'};
-var $elm$core$Array$repeat = F2(
-	function (n, e) {
-		return A2(
-			$elm$core$Array$initialize,
-			n,
-			function (_v0) {
-				return e;
-			});
-	});
-var $author$project$Game$Levels$Level1$generateGrid = {
-	size: _Utils_Tuple2(1, 3),
-	squares: A2(
-		$elm$core$Array$repeat,
-		3,
-		{
-			isCovered: false,
-			position: {x: 0, y: 0}
-		})
-};
-var $author$project$Game$Levels$Level2$generateGrid = {
-	size: _Utils_Tuple2(2, 4),
-	squares: A2(
-		$elm$core$Array$repeat,
-		8,
-		{
-			isCovered: false,
-			position: {x: 0, y: 0}
-		})
-};
-var $author$project$Game$GameRoute$generateLevelGrid = function (level) {
-	if (level === 1) {
-		return $author$project$Game$Levels$Level1$generateGrid;
-	} else {
-		return $author$project$Game$Levels$Level2$generateGrid;
-	}
-};
-var $author$project$Puzzles$One = {$: 'One'};
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $author$project$Game$Levels$Level1$generatePuzzles = _List_fromArray(
-	[
-		{
-		id: 1,
-		image: $author$project$Puzzles$One,
-		position: {x: -1, y: -1},
-		rotation: 0,
-		shape: {down: 0, left: 1, right: 1, up: 0}
-	}
-	]);
-var $author$project$Puzzles$Seven = {$: 'Seven'};
-var $author$project$Game$Levels$Level2$generatePuzzles = _List_fromArray(
-	[
-		{
-		id: 1,
-		image: $author$project$Puzzles$Seven,
-		position: {x: -1, y: -1},
-		rotation: 0,
-		shape: {down: 2, left: 0, right: 1, up: 0}
-	},
-		{
-		id: 2,
-		image: $author$project$Puzzles$Seven,
-		position: {x: -1, y: -1},
-		rotation: 0,
-		shape: {down: 2, left: 0, right: 1, up: 0}
-	}
-	]);
-var $author$project$Game$GameRoute$generateLevelPuzzles = function (level) {
-	if (level === 1) {
-		return $author$project$Game$Levels$Level1$generatePuzzles;
-	} else {
-		return $author$project$Game$Levels$Level2$generatePuzzles;
-	}
-};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging = {$: 'NotDragging'};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$init = $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging;
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Main$init = function (_v0) {
-	return _Utils_Tuple2(
-		{
-			dragDrop: $norpan$elm_html5_drag_drop$Html5$DragDrop$init,
-			gs: {
-				grid: $author$project$Game$GameRoute$generateLevelGrid(2),
-				level: 2,
-				puzzles: $author$project$Game$GameRoute$generateLevelPuzzles(2),
-				status: $author$project$Main$HomePage
-			}
-		},
-		$elm$core$Platform$Cmd$none);
-};
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
-var $author$project$Main$subscriptions = function (model) {
-	return $elm$core$Platform$Sub$none;
-};
-var $author$project$Main$Playing = {$: 'Playing'};
-var $elm$core$Debug$log = _Debug_log;
-var $elm$core$Debug$toString = _Debug_toString;
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver = F4(
-	function (a, b, c, d) {
-		return {$: 'DraggedOver', a: a, b: b, c: c, d: d};
-	});
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$Dragging = function (a) {
-	return {$: 'Dragging', a: a};
-};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$updateCommon = F3(
-	function (sticky, msg, model) {
-		var _v0 = _Utils_Tuple3(msg, model, sticky);
-		_v0$9:
-		while (true) {
-			switch (_v0.a.$) {
-				case 'DragStart':
-					var _v1 = _v0.a;
-					var dragId = _v1.a;
-					return _Utils_Tuple2(
-						$norpan$elm_html5_drag_drop$Html5$DragDrop$Dragging(dragId),
-						$elm$core$Maybe$Nothing);
-				case 'DragEnd':
-					var _v2 = _v0.a;
-					return _Utils_Tuple2($norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging, $elm$core$Maybe$Nothing);
-				case 'DragEnter':
-					switch (_v0.b.$) {
-						case 'Dragging':
-							var dropId = _v0.a.a;
-							var dragId = _v0.b.a;
-							return _Utils_Tuple2(
-								A4($norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver, dragId, dropId, 0, $elm$core$Maybe$Nothing),
-								$elm$core$Maybe$Nothing);
-						case 'DraggedOver':
-							var dropId = _v0.a.a;
-							var _v3 = _v0.b;
-							var dragId = _v3.a;
-							var pos = _v3.d;
-							return _Utils_Tuple2(
-								A4($norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver, dragId, dropId, 0, pos),
-								$elm$core$Maybe$Nothing);
-						default:
-							break _v0$9;
-					}
-				case 'DragLeave':
-					if ((_v0.b.$ === 'DraggedOver') && (!_v0.c)) {
-						var dropId_ = _v0.a.a;
-						var _v4 = _v0.b;
-						var dragId = _v4.a;
-						var dropId = _v4.b;
-						return _Utils_eq(dropId_, dropId) ? _Utils_Tuple2(
-							$norpan$elm_html5_drag_drop$Html5$DragDrop$Dragging(dragId),
-							$elm$core$Maybe$Nothing) : _Utils_Tuple2(model, $elm$core$Maybe$Nothing);
-					} else {
-						break _v0$9;
-					}
-				case 'DragOver':
-					switch (_v0.b.$) {
-						case 'Dragging':
-							var _v5 = _v0.a;
-							var dropId = _v5.a;
-							var timeStamp = _v5.b;
-							var pos = _v5.c;
-							var dragId = _v0.b.a;
-							return _Utils_Tuple2(
-								A4(
-									$norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver,
-									dragId,
-									dropId,
-									timeStamp,
-									$elm$core$Maybe$Just(pos)),
-								$elm$core$Maybe$Nothing);
-						case 'DraggedOver':
-							var _v6 = _v0.a;
-							var dropId = _v6.a;
-							var timeStamp = _v6.b;
-							var pos = _v6.c;
-							var _v7 = _v0.b;
-							var dragId = _v7.a;
-							var currentDropId = _v7.b;
-							var currentTimeStamp = _v7.c;
-							var currentPos = _v7.d;
-							return _Utils_eq(timeStamp, currentTimeStamp) ? _Utils_Tuple2(model, $elm$core$Maybe$Nothing) : _Utils_Tuple2(
-								A4(
-									$norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver,
-									dragId,
-									dropId,
-									timeStamp,
-									$elm$core$Maybe$Just(pos)),
-								$elm$core$Maybe$Nothing);
-						default:
-							break _v0$9;
-					}
-				default:
-					switch (_v0.b.$) {
-						case 'Dragging':
-							var _v8 = _v0.a;
-							var dropId = _v8.a;
-							var pos = _v8.b;
-							var dragId = _v0.b.a;
-							return _Utils_Tuple2(
-								$norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging,
-								$elm$core$Maybe$Just(
-									_Utils_Tuple3(dragId, dropId, pos)));
-						case 'DraggedOver':
-							var _v9 = _v0.a;
-							var dropId = _v9.a;
-							var pos = _v9.b;
-							var _v10 = _v0.b;
-							var dragId = _v10.a;
-							return _Utils_Tuple2(
-								$norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging,
-								$elm$core$Maybe$Just(
-									_Utils_Tuple3(dragId, dropId, pos)));
-						default:
-							break _v0$9;
-					}
-			}
-		}
-		return _Utils_Tuple2(model, $elm$core$Maybe$Nothing);
-	});
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$update = $norpan$elm_html5_drag_drop$Html5$DragDrop$updateCommon(false);
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
-var $elm$core$Basics$neq = _Utils_notEqual;
-var $author$project$Main$updatePuzzles = F3(
-	function (id, position, puzzles) {
-		return (_Utils_cmp(position.x, -1) > 0) ? A2(
-			$elm$core$List$filter,
-			function (a) {
-				return !_Utils_eq(a.id, id);
-			},
-			puzzles) : puzzles;
-	});
-var $author$project$Main$updateGameSate = F3(
-	function (id, position, gs) {
-		return {
-			grid: gs.grid,
-			level: gs.level,
-			puzzles: A3($author$project$Main$updatePuzzles, id, position, gs.puzzles),
-			status: gs.status
-		};
-	});
-var $author$project$Main$updateRotation = F2(
-	function (puzzle, id) {
-		return {
-			id: puzzle.id,
-			image: puzzle.image,
-			position: puzzle.position,
-			rotation: _Utils_eq(puzzle.id, id) ? (puzzle.rotation + 90) : puzzle.rotation,
-			shape: _Utils_eq(puzzle.id, id) ? {down: puzzle.shape.right, left: puzzle.shape.down, right: puzzle.shape.up, up: puzzle.shape.left} : puzzle.shape
-		};
-	});
-var $author$project$Main$update = F2(
-	function (msg, model) {
-		switch (msg.$) {
-			case 'Play':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							gs: {grid: model.gs.grid, level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Main$Playing}
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'Exit':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							gs: {grid: model.gs.grid, level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Main$HomePage}
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'Next':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							gs: {
-								grid: $author$project$Game$GameRoute$generateLevelGrid(model.gs.level + 1),
-								level: model.gs.level + 1,
-								puzzles: $author$project$Game$GameRoute$generateLevelPuzzles(model.gs.level + 1),
-								status: $author$project$Main$Playing
-							}
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'RotateImage':
-				var msg_ = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							gs: {
-								grid: model.gs.grid,
-								level: model.gs.level,
-								puzzles: A2(
-									$elm$core$List$map,
-									function (puzzle) {
-										return A2($author$project$Main$updateRotation, puzzle, msg_);
-									},
-									model.gs.puzzles),
-								status: $author$project$Main$Playing
-							}
-						}),
-					$elm$core$Platform$Cmd$none);
-			default:
-				var msg_ = msg.a;
-				var _v1 = A2($norpan$elm_html5_drag_drop$Html5$DragDrop$update, msg_, model.dragDrop);
-				var model_ = _v1.a;
-				var result = _v1.b;
-				return A2(
-					$elm$core$Debug$log,
-					$elm$core$Debug$toString(msg_),
-					_Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								dragDrop: model_,
-								gs: function () {
-									if (result.$ === 'Nothing') {
-										return model.gs;
-									} else {
-										var _v3 = result.a;
-										var id = _v3.a;
-										var position = _v3.b;
-										return A3($author$project$Main$updateGameSate, id, position, model.gs);
-									}
-								}()
-							}),
-						$elm$core$Platform$Cmd$none));
-		}
-	});
-var $author$project$Main$Exit = {$: 'Exit'};
-var $author$project$Main$Play = {$: 'Play'};
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
-var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
-var $elm$html$Html$div = _VirtualDom_node('div');
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Main$menuButton = F2(
-	function (clickMsg, content) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('menu-button'),
-					$elm$html$Html$Events$onClick(clickMsg)
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(content)
-				]));
-	});
-var $author$project$Main$viewHomePage = A2(
-	$elm$html$Html$div,
-	_List_fromArray(
-		[
-			$elm$html$Html$Attributes$class('background')
-		]),
-	_List_fromArray(
-		[
-			A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('menu')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$h1,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('title')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Tangram')
-						])),
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('buttons')
-						]),
-					_List_fromArray(
-						[
-							A2($author$project$Main$menuButton, $author$project$Main$Play, 'PLAY'),
-							A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
-						]))
-				]))
-		]));
-var $author$project$Main$container = $elm$html$Html$div(_List_Nil);
-var $author$project$Main$DragDropMsg = function (a) {
-	return {$: 'DragDropMsg', a: a};
-};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnter = function (a) {
-	return {$: 'DragEnter', a: a};
-};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragLeave = function (a) {
-	return {$: 'DragLeave', a: a};
-};
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragOver = F3(
-	function (a, b, c) {
-		return {$: 'DragOver', a: a, b: b, c: c};
-	});
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$Drop = F2(
-	function (a, b) {
-		return {$: 'Drop', a: a, b: b};
-	});
-var $elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
-var $elm$virtual_dom$VirtualDom$Custom = function (a) {
-	return {$: 'Custom', a: a};
-};
-var $elm$html$Html$Events$custom = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Custom(decoder));
-	});
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions = F3(
-	function (name, _v0, decoder) {
-		var stopPropagation = _v0.stopPropagation;
-		var preventDefault = _v0.preventDefault;
-		return A2(
-			$elm$html$Html$Events$custom,
-			name,
-			A2(
-				$elm$json$Json$Decode$map,
-				function (msg) {
-					return {message: msg, preventDefault: preventDefault, stopPropagation: stopPropagation};
-				},
-				decoder));
-	});
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$Position = F4(
-	function (width, height, x, y) {
-		return {height: height, width: width, x: x, y: y};
-	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
-	});
-var $elm$json$Json$Decode$float = _Json_decodeFloat;
-var $elm$json$Json$Decode$int = _Json_decodeInt;
-var $elm$json$Json$Decode$map4 = _Json_map4;
-var $elm$core$Basics$round = _Basics_round;
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder = A5(
-	$elm$json$Json$Decode$map4,
-	$norpan$elm_html5_drag_drop$Html5$DragDrop$Position,
-	A2(
-		$elm$json$Json$Decode$at,
-		_List_fromArray(
-			['currentTarget', 'clientWidth']),
-		$elm$json$Json$Decode$int),
-	A2(
-		$elm$json$Json$Decode$at,
-		_List_fromArray(
-			['currentTarget', 'clientHeight']),
-		$elm$json$Json$Decode$int),
-	A2(
-		$elm$json$Json$Decode$map,
-		$elm$core$Basics$round,
-		A2(
-			$elm$json$Json$Decode$at,
-			_List_fromArray(
-				['offsetX']),
-			$elm$json$Json$Decode$float)),
-	A2(
-		$elm$json$Json$Decode$map,
-		$elm$core$Basics$round,
-		A2(
-			$elm$json$Json$Decode$at,
-			_List_fromArray(
-				['offsetY']),
-			$elm$json$Json$Decode$float)));
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$timeStampDecoder = A2(
-	$elm$json$Json$Decode$map,
-	$elm$core$Basics$round,
-	A2(
-		$elm$json$Json$Decode$at,
-		_List_fromArray(
-			['timeStamp']),
-		$elm$json$Json$Decode$float));
-var $norpan$elm_html5_drag_drop$Html5$DragDrop$droppable = F2(
-	function (wrap, dropId) {
-		return _List_fromArray(
-			[
-				A3(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
-				'dragenter',
-				{preventDefault: true, stopPropagation: true},
-				$elm$json$Json$Decode$succeed(
-					wrap(
-						$norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnter(dropId)))),
-				A3(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
-				'dragleave',
-				{preventDefault: true, stopPropagation: true},
-				$elm$json$Json$Decode$succeed(
-					wrap(
-						$norpan$elm_html5_drag_drop$Html5$DragDrop$DragLeave(dropId)))),
-				A3(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
-				'dragover',
-				{preventDefault: true, stopPropagation: false},
-				A2(
-					$elm$json$Json$Decode$map,
-					wrap,
-					A3(
-						$elm$json$Json$Decode$map2,
-						$norpan$elm_html5_drag_drop$Html5$DragDrop$DragOver(dropId),
-						$norpan$elm_html5_drag_drop$Html5$DragDrop$timeStampDecoder,
-						$norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder))),
-				A3(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
-				'drop',
-				{preventDefault: true, stopPropagation: true},
-				A2(
-					$elm$json$Json$Decode$map,
-					A2(
-						$elm$core$Basics$composeL,
-						wrap,
-						$norpan$elm_html5_drag_drop$Html5$DragDrop$Drop(dropId)),
-					$norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder))
-			]);
-	});
-var $elm$html$Html$span = _VirtualDom_node('span');
-var $author$project$Main$square = function (_v0) {
-	var a = _v0.a;
-	var b = _v0.b;
-	return A2(
-		$elm$html$Html$span,
-		_Utils_ap(
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('square')
-				]),
-			A2(
-				$norpan$elm_html5_drag_drop$Html5$DragDrop$droppable,
-				$author$project$Main$DragDropMsg,
-				{x: a, y: b})),
-		_List_fromArray(
-			[
-				$elm$html$Html$text(
-				'(' + ($elm$core$String$fromInt(a) + (', ' + ($elm$core$String$fromInt(b) + ')'))))
-			]));
-};
+var $author$project$Game$GameRoute$HomePage = {$: 'HomePage'};
 var $elm$core$Elm$JsArray$appendN = _JsArray_appendN;
 var $elm$core$Elm$JsArray$slice = _JsArray_slice;
 var $elm$core$Array$appendHelpBuilder = F2(
@@ -5998,7 +5415,7 @@ var $elm$core$Array$slice = F3(
 			correctFrom,
 			A2($elm$core$Array$sliceRight, correctTo, array));
 	});
-var $author$project$Main$toIndexed2dList = F2(
+var $author$project$Grid$genarateIndexedSquare = F2(
 	function (width, height) {
 		return A3(
 			$elm$core$List$foldr,
@@ -6015,17 +5432,817 @@ var $author$project$Main$toIndexed2dList = F2(
 									$elm$core$Array$initialize,
 									width * height,
 									function (n) {
-										return _Utils_Tuple2((n / width) | 0, n % width);
+										return {
+											isCovered: false,
+											position: {x: (n / width) | 0, y: n % width}
+										};
 									}))),
 						result);
 				}),
 			_List_Nil,
 			A2($elm$core$List$range, 0, height));
 	});
+var $author$project$Game$Levels$Level1$generateGrid = {
+	count: 0,
+	height: 3,
+	squares: A2($author$project$Grid$genarateIndexedSquare, 1, 3),
+	width: 1
+};
+var $author$project$Game$Levels$Level2$generateGrid = {
+	count: 0,
+	height: 4,
+	squares: A2($author$project$Grid$genarateIndexedSquare, 2, 4),
+	width: 2
+};
+var $author$project$Game$GameRoute$generateLevelGrid = function (level) {
+	if (level === 1) {
+		return $author$project$Game$Levels$Level1$generateGrid;
+	} else {
+		return $author$project$Game$Levels$Level2$generateGrid;
+	}
+};
+var $author$project$Puzzles$One = {$: 'One'};
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $author$project$Game$Levels$Level1$generatePuzzles = _List_fromArray(
+	[
+		{
+		id: 1,
+		image: $author$project$Puzzles$One,
+		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 0, left: 1, right: 1, up: 0}
+	}
+	]);
+var $author$project$Puzzles$Seven = {$: 'Seven'};
+var $author$project$Game$Levels$Level2$generatePuzzles = _List_fromArray(
+	[
+		{
+		id: 1,
+		image: $author$project$Puzzles$Seven,
+		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 2, left: 0, right: 1, up: 0}
+	},
+		{
+		id: 2,
+		image: $author$project$Puzzles$Seven,
+		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 2, left: 0, right: 1, up: 0}
+	}
+	]);
+var $author$project$Game$GameRoute$generateLevelPuzzles = function (level) {
+	if (level === 1) {
+		return $author$project$Game$Levels$Level1$generatePuzzles;
+	} else {
+		return $author$project$Game$Levels$Level2$generatePuzzles;
+	}
+};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging = {$: 'NotDragging'};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$init = $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging;
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $author$project$Main$init = function (_v0) {
+	return _Utils_Tuple2(
+		{
+			dragDrop: $norpan$elm_html5_drag_drop$Html5$DragDrop$init,
+			gs: {
+				grid: $author$project$Game$GameRoute$generateLevelGrid(1),
+				level: 1,
+				puzzles: $author$project$Game$GameRoute$generateLevelPuzzles(1),
+				status: $author$project$Game$GameRoute$HomePage
+			}
+		},
+		$elm$core$Platform$Cmd$none);
+};
+var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $author$project$Main$subscriptions = function (model) {
+	return $elm$core$Platform$Sub$none;
+};
+var $author$project$Game$GameRoute$Playing = {$: 'Playing'};
+var $elm$core$Debug$log = _Debug_log;
+var $elm$core$Debug$toString = _Debug_toString;
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver = F4(
+	function (a, b, c, d) {
+		return {$: 'DraggedOver', a: a, b: b, c: c, d: d};
+	});
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$Dragging = function (a) {
+	return {$: 'Dragging', a: a};
+};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$updateCommon = F3(
+	function (sticky, msg, model) {
+		var _v0 = _Utils_Tuple3(msg, model, sticky);
+		_v0$9:
+		while (true) {
+			switch (_v0.a.$) {
+				case 'DragStart':
+					var _v1 = _v0.a;
+					var dragId = _v1.a;
+					return _Utils_Tuple2(
+						$norpan$elm_html5_drag_drop$Html5$DragDrop$Dragging(dragId),
+						$elm$core$Maybe$Nothing);
+				case 'DragEnd':
+					var _v2 = _v0.a;
+					return _Utils_Tuple2($norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging, $elm$core$Maybe$Nothing);
+				case 'DragEnter':
+					switch (_v0.b.$) {
+						case 'Dragging':
+							var dropId = _v0.a.a;
+							var dragId = _v0.b.a;
+							return _Utils_Tuple2(
+								A4($norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver, dragId, dropId, 0, $elm$core$Maybe$Nothing),
+								$elm$core$Maybe$Nothing);
+						case 'DraggedOver':
+							var dropId = _v0.a.a;
+							var _v3 = _v0.b;
+							var dragId = _v3.a;
+							var pos = _v3.d;
+							return _Utils_Tuple2(
+								A4($norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver, dragId, dropId, 0, pos),
+								$elm$core$Maybe$Nothing);
+						default:
+							break _v0$9;
+					}
+				case 'DragLeave':
+					if ((_v0.b.$ === 'DraggedOver') && (!_v0.c)) {
+						var dropId_ = _v0.a.a;
+						var _v4 = _v0.b;
+						var dragId = _v4.a;
+						var dropId = _v4.b;
+						return _Utils_eq(dropId_, dropId) ? _Utils_Tuple2(
+							$norpan$elm_html5_drag_drop$Html5$DragDrop$Dragging(dragId),
+							$elm$core$Maybe$Nothing) : _Utils_Tuple2(model, $elm$core$Maybe$Nothing);
+					} else {
+						break _v0$9;
+					}
+				case 'DragOver':
+					switch (_v0.b.$) {
+						case 'Dragging':
+							var _v5 = _v0.a;
+							var dropId = _v5.a;
+							var timeStamp = _v5.b;
+							var pos = _v5.c;
+							var dragId = _v0.b.a;
+							return _Utils_Tuple2(
+								A4(
+									$norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver,
+									dragId,
+									dropId,
+									timeStamp,
+									$elm$core$Maybe$Just(pos)),
+								$elm$core$Maybe$Nothing);
+						case 'DraggedOver':
+							var _v6 = _v0.a;
+							var dropId = _v6.a;
+							var timeStamp = _v6.b;
+							var pos = _v6.c;
+							var _v7 = _v0.b;
+							var dragId = _v7.a;
+							var currentDropId = _v7.b;
+							var currentTimeStamp = _v7.c;
+							var currentPos = _v7.d;
+							return _Utils_eq(timeStamp, currentTimeStamp) ? _Utils_Tuple2(model, $elm$core$Maybe$Nothing) : _Utils_Tuple2(
+								A4(
+									$norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver,
+									dragId,
+									dropId,
+									timeStamp,
+									$elm$core$Maybe$Just(pos)),
+								$elm$core$Maybe$Nothing);
+						default:
+							break _v0$9;
+					}
+				default:
+					switch (_v0.b.$) {
+						case 'Dragging':
+							var _v8 = _v0.a;
+							var dropId = _v8.a;
+							var pos = _v8.b;
+							var dragId = _v0.b.a;
+							return _Utils_Tuple2(
+								$norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging,
+								$elm$core$Maybe$Just(
+									_Utils_Tuple3(dragId, dropId, pos)));
+						case 'DraggedOver':
+							var _v9 = _v0.a;
+							var dropId = _v9.a;
+							var pos = _v9.b;
+							var _v10 = _v0.b;
+							var dragId = _v10.a;
+							return _Utils_Tuple2(
+								$norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging,
+								$elm$core$Maybe$Just(
+									_Utils_Tuple3(dragId, dropId, pos)));
+						default:
+							break _v0$9;
+					}
+			}
+		}
+		return _Utils_Tuple2(model, $elm$core$Maybe$Nothing);
+	});
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$update = $norpan$elm_html5_drag_drop$Html5$DragDrop$updateCommon(false);
+var $author$project$Game$GameRoute$Won = {$: 'Won'};
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
+};
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $author$project$Game$GameRoute$countCovered = function (grid) {
+	return $elm$core$List$length(
+		A2(
+			$elm$core$List$filter,
+			function (a) {
+				return a.isCovered;
+			},
+			$elm$core$List$concat(grid.squares)));
+};
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
+var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$core$Dict$Black = {$: 'Black'};
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = {$: 'Red'};
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1.$) {
+				case 'LT':
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 'EQ':
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $elm$core$Dict$get = F2(
+	function (targetKey, dict) {
+		get:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
+				switch (_v1.$) {
+					case 'LT':
+						var $temp$targetKey = targetKey,
+							$temp$dict = left;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+					case 'EQ':
+						return $elm$core$Maybe$Just(value);
+					default:
+						var $temp$targetKey = targetKey,
+							$temp$dict = right;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+				}
+			}
+		}
+	});
+var $elm$core$Basics$neq = _Utils_notEqual;
+var $author$project$Game$GameRoute$updatePuzzles = F3(
+	function (id, position, puzzles) {
+		return (_Utils_cmp(position.x, -1) > 0) ? A2(
+			$elm$core$List$filter,
+			function (a) {
+				return !_Utils_eq(a.id, id);
+			},
+			puzzles) : puzzles;
+	});
+var $author$project$Game$GameRoute$updateSquare = F3(
+	function (square, dragpuzzle, position) {
+		if (dragpuzzle.$ === 'Nothing') {
+			return square;
+		} else {
+			var puzzle = dragpuzzle.a;
+			var covered = (_Utils_eq(square.position.y, position.y) && ((_Utils_cmp(square.position.x, position.x - puzzle.shape.up) > -1) && (_Utils_cmp(square.position.x, position.x + puzzle.shape.down) < 1))) ? true : ((_Utils_eq(square.position.x, position.x) && ((_Utils_cmp(square.position.y, position.y - puzzle.shape.left) > -1) && (_Utils_cmp(square.position.y, position.y + puzzle.shape.right) < 1))) ? true : false);
+			return covered ? {isCovered: true, position: square.position} : square;
+		}
+	});
+var $author$project$Game$GameRoute$updateSquares = F3(
+	function (dragpuzzle, position, gs) {
+		return A2(
+			$elm$core$List$map,
+			$elm$core$List$map(
+				function (a) {
+					return A3($author$project$Game$GameRoute$updateSquare, a, dragpuzzle, position);
+				}),
+			gs.grid.squares);
+	});
+var $author$project$Game$GameRoute$updateLevelGameStatus = F3(
+	function (id, position, gs) {
+		var dragpuzzle = A2(
+			$elm$core$Dict$get,
+			id,
+			$elm$core$Dict$fromList(
+				A2(
+					$elm$core$List$map,
+					function (item) {
+						return _Utils_Tuple2(item.id, item);
+					},
+					gs.puzzles)));
+		return {
+			grid: {
+				count: $author$project$Game$GameRoute$countCovered(gs.grid),
+				height: gs.grid.height,
+				squares: A3($author$project$Game$GameRoute$updateSquares, dragpuzzle, position, gs),
+				width: gs.grid.width
+			},
+			level: gs.level,
+			puzzles: A3($author$project$Game$GameRoute$updatePuzzles, id, position, gs.puzzles),
+			status: (!_Utils_eq(gs.grid.count, gs.grid.width * gs.grid.height)) ? gs.status : $author$project$Game$GameRoute$Won
+		};
+	});
+var $author$project$Main$updateRotation = F2(
+	function (puzzle, id) {
+		return {
+			id: puzzle.id,
+			image: puzzle.image,
+			position: puzzle.position,
+			rotation: _Utils_eq(puzzle.id, id) ? (puzzle.rotation + 90) : puzzle.rotation,
+			shape: _Utils_eq(puzzle.id, id) ? {down: puzzle.shape.right, left: puzzle.shape.down, right: puzzle.shape.up, up: puzzle.shape.left} : puzzle.shape
+		};
+	});
+var $author$project$Main$update = F2(
+	function (msg, model) {
+		switch (msg.$) {
+			case 'Play':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							gs: {grid: model.gs.grid, level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Game$GameRoute$Playing}
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'Exit':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							gs: {grid: model.gs.grid, level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Game$GameRoute$HomePage}
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'Next':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							gs: {
+								grid: $author$project$Game$GameRoute$generateLevelGrid(model.gs.level + 1),
+								level: model.gs.level + 1,
+								puzzles: $author$project$Game$GameRoute$generateLevelPuzzles(model.gs.level + 1),
+								status: $author$project$Game$GameRoute$Playing
+							}
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'RotateImage':
+				var msg_ = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							gs: {
+								grid: model.gs.grid,
+								level: model.gs.level,
+								puzzles: A2(
+									$elm$core$List$map,
+									function (puzzle) {
+										return A2($author$project$Main$updateRotation, puzzle, msg_);
+									},
+									model.gs.puzzles),
+								status: $author$project$Game$GameRoute$Playing
+							}
+						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var msg_ = msg.a;
+				var _v1 = A2($norpan$elm_html5_drag_drop$Html5$DragDrop$update, msg_, model.dragDrop);
+				var model_ = _v1.a;
+				var result = _v1.b;
+				return A2(
+					$elm$core$Debug$log,
+					$elm$core$Debug$toString(msg_),
+					_Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								dragDrop: model_,
+								gs: function () {
+									if (result.$ === 'Nothing') {
+										return model.gs;
+									} else {
+										var _v3 = result.a;
+										var id = _v3.a;
+										var position = _v3.b;
+										return A3($author$project$Game$GameRoute$updateLevelGameStatus, id, position, model.gs);
+									}
+								}()
+							}),
+						$elm$core$Platform$Cmd$none));
+		}
+	});
+var $author$project$Main$Exit = {$: 'Exit'};
+var $author$project$Main$Play = {$: 'Play'};
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Main$menuButton = F2(
+	function (clickMsg, content) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('menu-button'),
+					$elm$html$Html$Events$onClick(clickMsg)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(content)
+				]));
+	});
+var $author$project$Main$viewHomePage = A2(
+	$elm$html$Html$div,
+	_List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('background')
+		]),
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('menu')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h1,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('title')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Tangram')
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('buttons')
+						]),
+					_List_fromArray(
+						[
+							A2($author$project$Main$menuButton, $author$project$Main$Play, 'PLAY'),
+							A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
+						]))
+				]))
+		]));
+var $author$project$Main$Next = {$: 'Next'};
+var $author$project$Main$gameButton = F2(
+	function (clickMsg, content) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('game-button'),
+					$elm$html$Html$Events$onClick(clickMsg)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(content)
+				]));
+	});
+var $author$project$Main$container = $elm$html$Html$div(_List_Nil);
+var $author$project$Main$DragDropMsg = function (a) {
+	return {$: 'DragDropMsg', a: a};
+};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnter = function (a) {
+	return {$: 'DragEnter', a: a};
+};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragLeave = function (a) {
+	return {$: 'DragLeave', a: a};
+};
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$DragOver = F3(
+	function (a, b, c) {
+		return {$: 'DragOver', a: a, b: b, c: c};
+	});
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$Drop = F2(
+	function (a, b) {
+		return {$: 'Drop', a: a, b: b};
+	});
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $elm$virtual_dom$VirtualDom$Custom = function (a) {
+	return {$: 'Custom', a: a};
+};
+var $elm$html$Html$Events$custom = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Custom(decoder));
+	});
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions = F3(
+	function (name, _v0, decoder) {
+		var stopPropagation = _v0.stopPropagation;
+		var preventDefault = _v0.preventDefault;
+		return A2(
+			$elm$html$Html$Events$custom,
+			name,
+			A2(
+				$elm$json$Json$Decode$map,
+				function (msg) {
+					return {message: msg, preventDefault: preventDefault, stopPropagation: stopPropagation};
+				},
+				decoder));
+	});
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$Position = F4(
+	function (width, height, x, y) {
+		return {height: height, width: width, x: x, y: y};
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$float = _Json_decodeFloat;
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $elm$json$Json$Decode$map4 = _Json_map4;
+var $elm$core$Basics$round = _Basics_round;
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder = A5(
+	$elm$json$Json$Decode$map4,
+	$norpan$elm_html5_drag_drop$Html5$DragDrop$Position,
+	A2(
+		$elm$json$Json$Decode$at,
+		_List_fromArray(
+			['currentTarget', 'clientWidth']),
+		$elm$json$Json$Decode$int),
+	A2(
+		$elm$json$Json$Decode$at,
+		_List_fromArray(
+			['currentTarget', 'clientHeight']),
+		$elm$json$Json$Decode$int),
+	A2(
+		$elm$json$Json$Decode$map,
+		$elm$core$Basics$round,
+		A2(
+			$elm$json$Json$Decode$at,
+			_List_fromArray(
+				['offsetX']),
+			$elm$json$Json$Decode$float)),
+	A2(
+		$elm$json$Json$Decode$map,
+		$elm$core$Basics$round,
+		A2(
+			$elm$json$Json$Decode$at,
+			_List_fromArray(
+				['offsetY']),
+			$elm$json$Json$Decode$float)));
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$timeStampDecoder = A2(
+	$elm$json$Json$Decode$map,
+	$elm$core$Basics$round,
+	A2(
+		$elm$json$Json$Decode$at,
+		_List_fromArray(
+			['timeStamp']),
+		$elm$json$Json$Decode$float));
+var $norpan$elm_html5_drag_drop$Html5$DragDrop$droppable = F2(
+	function (wrap, dropId) {
+		return _List_fromArray(
+			[
+				A3(
+				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
+				'dragenter',
+				{preventDefault: true, stopPropagation: true},
+				$elm$json$Json$Decode$succeed(
+					wrap(
+						$norpan$elm_html5_drag_drop$Html5$DragDrop$DragEnter(dropId)))),
+				A3(
+				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
+				'dragleave',
+				{preventDefault: true, stopPropagation: true},
+				$elm$json$Json$Decode$succeed(
+					wrap(
+						$norpan$elm_html5_drag_drop$Html5$DragDrop$DragLeave(dropId)))),
+				A3(
+				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
+				'dragover',
+				{preventDefault: true, stopPropagation: false},
+				A2(
+					$elm$json$Json$Decode$map,
+					wrap,
+					A3(
+						$elm$json$Json$Decode$map2,
+						$norpan$elm_html5_drag_drop$Html5$DragDrop$DragOver(dropId),
+						$norpan$elm_html5_drag_drop$Html5$DragDrop$timeStampDecoder,
+						$norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder))),
+				A3(
+				$norpan$elm_html5_drag_drop$Html5$DragDrop$onWithOptions,
+				'drop',
+				{preventDefault: true, stopPropagation: true},
+				A2(
+					$elm$json$Json$Decode$map,
+					A2(
+						$elm$core$Basics$composeL,
+						wrap,
+						$norpan$elm_html5_drag_drop$Html5$DragDrop$Drop(dropId)),
+					$norpan$elm_html5_drag_drop$Html5$DragDrop$positionDecoder))
+			]);
+	});
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $author$project$Main$square = function (s) {
+	var covered = s.isCovered ? _List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'background-color', '#000000')
+		]) : _Utils_ap(
+		_List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'background-color', '#FFFFFF')
+			]),
+		A2(
+			$norpan$elm_html5_drag_drop$Html5$DragDrop$droppable,
+			$author$project$Main$DragDropMsg,
+			{x: s.position.x, y: s.position.y}));
+	return A2(
+		$elm$html$Html$span,
+		_Utils_ap(
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('square')
+				]),
+			covered),
+		_List_fromArray(
+			[
+				$elm$html$Html$text(
+				'(' + ($elm$core$String$fromInt(s.position.x) + (', ' + ($elm$core$String$fromInt(s.position.y) + ')'))))
+			]));
+};
 var $author$project$Main$gridArea = function (gs) {
-	var _v0 = gs.grid.size;
-	var width_ = _v0.a;
-	var height_ = _v0.b;
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -6041,13 +6258,10 @@ var $author$project$Main$gridArea = function (gs) {
 					A2(
 						$elm$core$List$map,
 						$elm$core$List$map(
-							function (_v1) {
-								var a = _v1.a;
-								var b = _v1.b;
-								return $author$project$Main$square(
-									_Utils_Tuple2(a, b));
+							function (a) {
+								return $author$project$Main$square(a);
 							}),
-						A2($author$project$Main$toIndexed2dList, width_, height_))))
+						gs.grid.squares)))
 			]));
 };
 var $author$project$Main$RotateImage = function (a) {
@@ -6094,8 +6308,6 @@ var $norpan$elm_html5_drag_drop$Html5$DragDrop$draggable = F2(
 var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
 var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
 var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
 var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
@@ -6120,7 +6332,7 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 					[
 						$elm$svg$Svg$Attributes$width('120'),
 						$elm$svg$Svg$Attributes$height('120'),
-						$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
+						$elm$svg$Svg$Attributes$viewBox('0 0 120 120'),
 						$elm$svg$Svg$Attributes$style('stroke: currentColor;'),
 						A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
 						A2(
@@ -6379,7 +6591,7 @@ var $author$project$Main$puzzleArea = function (gs) {
 				{x: -1, y: -1})),
 		A2($elm$core$List$map, $author$project$Main$viewPuzzle, gs.puzzles));
 };
-var $author$project$Main$viewPlayArea = function (model) {
+var $author$project$Main$viewPlayArea = function (gs) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -6388,8 +6600,19 @@ var $author$project$Main$viewPlayArea = function (model) {
 			]),
 		_List_fromArray(
 			[
-				$author$project$Main$puzzleArea(model.gs),
-				$author$project$Main$gridArea(model.gs)
+				$author$project$Main$puzzleArea(gs),
+				$author$project$Main$gridArea(gs),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('buttons')
+					]),
+				_List_fromArray(
+					[
+						A2($author$project$Main$gameButton, $author$project$Main$Next, 'Next'),
+						A2($author$project$Main$gameButton, $author$project$Main$Exit, 'EXIT')
+					]))
 			]));
 };
 var $author$project$Main$view = function (model) {
@@ -6398,9 +6621,9 @@ var $author$project$Main$view = function (model) {
 		case 'HomePage':
 			return $author$project$Main$viewHomePage;
 		case 'Playing':
-			return $author$project$Main$viewPlayArea(model);
+			return $author$project$Main$viewPlayArea(model.gs);
 		default:
-			return $author$project$Main$viewPlayArea(model);
+			return $author$project$Main$viewPlayArea(model.gs);
 	}
 };
 var $author$project$Main$main = $elm$browser$Browser$element(

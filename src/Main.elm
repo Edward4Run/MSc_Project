@@ -8,11 +8,12 @@ import Svg as S
 import Svg.Attributes as SA
 import Html5.DragDrop as DragDrop
 import Array exposing (Array)
-import Game.GameRoute as GameRoute
+import Game.GameRoute as GameRoute exposing (GameState, Status(..))
 import Puzzles as Puzzles exposing (Puzzle, ImageType(..))
 import Debug exposing (toString, log)
 import Grid exposing (Grid)
 import Puzzles exposing (Position)
+import Grid exposing (Square)
 
 
 -- MAIN
@@ -27,31 +28,18 @@ main =
 
 -- MODEL
 type alias Model =
-  { gs : GameState
+  { gs : GameRoute.GameState
   , dragDrop : DragDrop.Model Int Puzzles.Position
   }
-
-type alias GameState =
-    { level : Int
-    , status : Status
-    , puzzles : List Puzzle
-    , grid : Grid
-    }
-
-type Status
-    = HomePage
-    | Playing
-    | Won
-
 
 
 -- INIT
 
 init : () -> ( Model, Cmd Msg )
-init _ = ( { gs = { level = 2
+init _ = ( { gs = { level = 1
                   , status = HomePage
-                  , puzzles = GameRoute.generateLevelPuzzles 2
-                  , grid = GameRoute.generateLevelGrid 2 }
+                  , puzzles = GameRoute.generateLevelPuzzles 1
+                  , grid = GameRoute.generateLevelGrid 1 }
             , dragDrop = DragDrop.init}
           , Cmd.none )
 
@@ -99,7 +87,7 @@ update msg model =
                   Nothing ->
                     model.gs
                   Just (id, position, _) ->
-                    updateGameSate id position model.gs
+                    GameRoute.updateLevelGameStatus id position model.gs
           }
         , Cmd.none
         )
@@ -119,21 +107,6 @@ updateRotation puzzle id =
               else puzzle.shape )
   , position = puzzle.position }
 
-updateGameSate : Int -> Position -> GameState -> GameState
-updateGameSate id position gs =
-  { level = gs.level
-  , status = gs.status
-  , puzzles = updatePuzzles id position gs.puzzles
-  , grid = gs.grid
-  }
-
-updatePuzzles : Int -> Position -> List Puzzle -> List Puzzle
-updatePuzzles id position puzzles =
-  if position.x > -1 then
-    List.filter ( \a -> a.id /= id ) puzzles
-  else
-    puzzles
-
 
 -- SUB
 subscriptions : Model -> Sub Msg
@@ -148,9 +121,9 @@ view model =
     HomePage ->
       viewHomePage
     Playing ->
-      viewPlayArea model
+      viewPlayArea model.gs
     Won ->
-      viewPlayArea model
+      viewPlayArea model.gs
 
 
 -- Homepage View
@@ -165,13 +138,15 @@ viewHomePage =
       ]
 
 
-
 -- PlayArea View
-viewPlayArea : Model -> Html Msg
-viewPlayArea model = 
+viewPlayArea : GameState -> Html Msg
+viewPlayArea gs =
   div [ class "background" ]
-      [ puzzleArea model.gs
-      , gridArea model.gs ]
+      [ puzzleArea gs
+      , gridArea gs 
+      , div [ class "buttons" ]
+            [ gameButton Next "Next"
+            , gameButton Exit "EXIT" ] ]
 
 puzzleArea : GameState -> Html Msg
 puzzleArea gs =
@@ -186,7 +161,7 @@ viewPuzzle puzzle =
       [ S.svg
         [ SA.width "120"
         , SA.height "120"
-        , SA.viewBox "0 0 80 120"
+        , SA.viewBox "0 0 120 120"
         , SA.style "stroke: currentColor;"
         , style "transition" "transform 0.5s"
         , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)") ] 
@@ -227,28 +202,32 @@ viewPuzzle puzzle =
 
 gridArea : GameState -> Html Msg
 gridArea gs = 
-  let
-    ( width_, height_ ) =
-      gs.grid.size
-  in
   div [ class "gridArea" ]
-      [ toIndexed2dList width_ height_
+      [ gs.grid.squares
           |> List.map 
-              (List.map
-                        (\(a, b) ->
-                            square (a, b)
-                        )
+            (List.map
+              (\a ->
+                  square a
               )
+            )
           |> List.map (div [ ])
           |> container
       ]
 
-square : (Int, Int) -> Html Msg
-square (a, b) =
+square : Square -> Html Msg
+square s =
+  let
+    covered =
+      if s.isCovered then
+        [ style "background-color" "#000000"]
+      else
+        [ style "background-color" "#FFFFFF"]
+        ++ DragDrop.droppable DragDropMsg { x = s.position.x, y = s.position.y }
+  in
   span ([ class "square" ]
-      ++ DragDrop.droppable DragDropMsg {x=a, y=b}
+      ++ covered
       )
-        [ text ("(" ++ String.fromInt(a) ++ ", " ++ String.fromInt(b) ++ ")") ]
+      [ text ("(" ++ String.fromInt(s.position.x) ++ ", " ++ String.fromInt(s.position.y) ++ ")") ]
 
 nonBreakingSpace : String
 nonBreakingSpace =
@@ -258,13 +237,13 @@ container : List (Html Msg) -> Html Msg
 container =
   div [ ]
 
-toIndexed2dList : Int -> Int -> List (List (Int,Int))
-toIndexed2dList width height =
-    List.range 0 height
+toIndexed2dList : Grid -> List (List (Int, Int))
+toIndexed2dList grid =
+    List.range 0 grid.height
         |> List.foldr
             (\y result ->
-                (Array.initialize (width * height) (\n -> (n // width, remainderBy width n))
-                    |> Array.slice (width * y) (width * y + width)
+                (Array.initialize (grid.width * grid.height) (\n -> (n // grid.width, remainderBy grid.width n))
+                    |> Array.slice (grid.width * y) (grid.width * y + grid.width)
                     |> Array.toList
                 )
                     :: result
@@ -281,4 +260,10 @@ menuButton clickMsg content =
     ]
     [ text content ]
 
-
+gameButton : Msg -> String -> Html Msg
+gameButton clickMsg content =
+  div
+    [ class "game-button"
+    , onClick clickMsg
+    ]
+    [ text content ]
