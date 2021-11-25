@@ -11,11 +11,6 @@ body {
     z-index: 0;
 }
 
-h1.title {
-    text-align: center;
-    font-family: 'Marker Felt';
-}
-
 .menu {
     width: 300px;
     height: 300px;
@@ -24,6 +19,13 @@ h1.title {
     align-items: center;
     background-color: #C4C4C4;
     border-radius: 10px;
+    border: 1px solid black;
+}
+
+h1.title {
+    text-align: center;
+    font-family: 'Marker Felt';
+    margin-top: 50px;
 }
 
 .menu-button {
@@ -32,9 +34,22 @@ h1.title {
     font-size: 24px;
     font-family: 'Chalkduster';
     background-color: #FFFFFF;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid black;
+    line-height: 50px;
+}
+
+.game-button {
+    width: 200px;
+    height: 50px;
+    font-size: 24px;
+    font-family: 'Chalkduster';
     margin-top: 30px;
     cursor: pointer;
     border-radius: 10px;
+    border: 1px solid black;
     line-height: 50px;
 }
 
@@ -49,6 +64,7 @@ h1.title {
     width: 500px;
     height: 500px;
     border: 1px solid black;
+    border-radius: 10px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -62,6 +78,7 @@ h1.title {
     align-items: center;
     justify-content: center;
     border: 1px solid black;
+    border-radius: 10px;
     margin: 20px;
 }
 

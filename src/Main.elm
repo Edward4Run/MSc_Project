@@ -2,18 +2,15 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html, div, h1, text, span)
-import Html.Attributes exposing (width, class, style)
+import Html.Attributes exposing (width, height, class, style)
 import Html.Events exposing (onClick)
-import Svg as S
-import Svg.Attributes as SA
+import Svg exposing (svg, rect)
+import Svg.Attributes exposing (viewBox, x, y)
 import Html5.DragDrop as DragDrop
-import Array exposing (Array)
 import Game.GameRoute as GameRoute exposing (GameState, Status(..))
-import Puzzles as Puzzles exposing (Puzzle, ImageType(..))
+import Puzzles exposing (Puzzle, ImageType(..))
+import Grid exposing (Grid, Square)
 import Debug exposing (toString, log)
-import Grid exposing (Grid)
-import Puzzles exposing (Position)
-import Grid exposing (Square)
 
 
 -- MAIN
@@ -28,7 +25,7 @@ main =
 
 -- MODEL
 type alias Model =
-  { gs : GameRoute.GameState
+  { gs : GameState
   , dragDrop : DragDrop.Model Int Puzzles.Position
   }
 
@@ -49,6 +46,7 @@ type Msg
   = Play 
   | Exit
   | Next
+  | Restart
   | DragDropMsg (DragDrop.Msg Int Puzzles.Position)
   | RotateImage Int
 
@@ -70,6 +68,11 @@ update msg model =
                         , status = Playing
                         , puzzles = GameRoute.generateLevelPuzzles ( model.gs.level + 1 )
                         , grid = GameRoute.generateLevelGrid ( model.gs.level + 1 ) } }, Cmd.none)
+    Restart ->
+      ( { model | gs = { level = model.gs.level
+                        , status = Playing
+                        , puzzles = GameRoute.generateLevelPuzzles model.gs.level
+                        , grid = GameRoute.generateLevelGrid model.gs.level } }, Cmd.none)
     RotateImage msg_ ->
       ( { model | gs = { level = model.gs.level
                         , status = Playing
@@ -145,7 +148,8 @@ viewPlayArea gs =
       [ puzzleArea gs
       , gridArea gs 
       , div [ class "buttons" ]
-            [ gameButton Next "Next"
+            [ gameButton Restart "Restart"
+            , gameButton Next "Next"
             , gameButton Exit "EXIT" ] ]
 
 puzzleArea : GameState -> Html Msg
@@ -158,46 +162,78 @@ puzzleArea gs =
 viewPuzzle : Puzzle -> Html Msg
 viewPuzzle puzzle =
     div ([ onClick (RotateImage puzzle.id) ] ++ DragDrop.draggable DragDropMsg puzzle.id )
-      [ S.svg
-        [ SA.width "120"
-        , SA.height "120"
-        , SA.viewBox "0 0 120 120"
-        , SA.style "stroke: currentColor;"
-        , style "transition" "transform 0.5s"
-        , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)") ] 
-        (case puzzle.image of
+      [ case puzzle.image of
           One ->
-            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "80", SA.y "0", SA.width "40", SA.height "40" ] []
-            ]
+            svg
+              [ width 120
+              , height 40
+              , viewBox "0 0 120 40"
+              , style "stroke" "currentColor"
+              , style "transition" "transform 0.5s"
+              , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
+              ]
+              [ rect [ x "0", y "0", width 40, height 40 ] []
+              , rect [ x "40", y "0", width 40, height 40 ] []
+              , rect [ x "80", y "0", width 40, height 40 ] []
+              ]
           Seven ->
-            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "0", SA.y "40", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "0", SA.y "80", SA.width "40", SA.height "40" ] []
-            ]
+            svg
+              [ width 80
+              , height 120
+              , viewBox "0 0 80 120"
+              , style "stroke" "currentColor"
+              , style "transition" "transform 0.5s"
+              , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
+              ]
+              [ rect [ x "0", y "0", width 40, height 40 ] []
+              , rect [ x "40", y "0", width 40, height 40 ] []
+              , rect [ x "0", y "40", width 40, height 40 ] []
+              , rect [ x "0", y "80", width 40, height 40 ] []
+              ]
           Four ->
-            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "0", SA.y "40", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "40", SA.y "40", SA.width "40", SA.height "40" ] []
-            ]
+            svg
+              [ width 80
+              , height 80
+              , viewBox "0 0 80 80"
+              , style "stroke" "currentColor"
+              , style "transition" "transform 0.5s"
+              , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
+              ]
+              [ rect [ x "0", y "0", width 40, height 40 ] []
+              , rect [ x "40", y "0", width 40, height 40 ] []
+              , rect [ x "0", y "40", width 40, height 40 ] []
+              , rect [ x "40", y "40", width 40, height 40 ] []
+              ]
           FourInLine ->
-            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "80", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "120", SA.y "0", SA.width "40", SA.height "40" ] []
-            ]
+            svg
+              [ width 160
+              , height 40
+              , viewBox "0 0 160 40"
+              , style "stroke" "currentColor"
+              , style "transition" "transform 0.5s"
+              , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
+              ]
+              [ rect [ x "0", y "0", width 40, height 40 ] []
+              , rect [ x "40", y "0", width 40, height 40 ] []
+              , rect [ x "80", y "0", width 40, height 40 ] []
+              , rect [ x "120", y "0", width 40, height 40 ] []
+              ]
           Six ->
-            [ S.rect [ SA.x "0", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "40", SA.y "0", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "0", SA.y "40", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "40", SA.y "40", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "0", SA.y "80", SA.width "40", SA.height "40" ] []
-            , S.rect [ SA.x "40", SA.y "80", SA.width "40", SA.height "40" ] []
-            ]
-        ) 
+            svg
+              [ width 80
+              , height 120
+              , viewBox "0 0 80 120"
+              , style "stroke" "currentColor"
+              , style "transition" "transform 0.5s"
+              , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
+              ]
+              [ rect [ x "0", y "0", width 40, height 40 ] []
+              , rect [ x "40", y "0", width 40, height 40 ] []
+              , rect [ x "0", y "40", width 40, height 40 ] []
+              , rect [ x "40", y "40", width 40, height 40 ] []
+              , rect [ x "0", y "80", width 40, height 40 ] []
+              , rect [ x "40", y "80", width 40, height 40 ] []
+              ]
       ]
 
 gridArea : GameState -> Html Msg
@@ -207,15 +243,15 @@ gridArea gs =
           |> List.map 
             (List.map
               (\a ->
-                  square a
+                  viewSquare a
               )
             )
           |> List.map (div [ ])
           |> container
       ]
 
-square : Square -> Html Msg
-square s =
+viewSquare : Square -> Html Msg
+viewSquare s =
   let
     covered =
       if s.isCovered then
@@ -227,7 +263,7 @@ square s =
   span ([ class "square" ]
       ++ covered
       )
-      [ text ("(" ++ String.fromInt(s.position.x) ++ ", " ++ String.fromInt(s.position.y) ++ ")") ]
+      [ text nonBreakingSpace ]
 
 nonBreakingSpace : String
 nonBreakingSpace =
@@ -236,19 +272,6 @@ nonBreakingSpace =
 container : List (Html Msg) -> Html Msg
 container =
   div [ ]
-
-toIndexed2dList : Grid -> List (List (Int, Int))
-toIndexed2dList grid =
-    List.range 0 grid.height
-        |> List.foldr
-            (\y result ->
-                (Array.initialize (grid.width * grid.height) (\n -> (n // grid.width, remainderBy grid.width n))
-                    |> Array.slice (grid.width * y) (grid.width * y + grid.width)
-                    |> Array.toList
-                )
-                    :: result
-            )
-            []
 
 
 -- BUTTONS

@@ -1,9 +1,5 @@
 module Puzzles exposing (..)
 
-import Html exposing (Html, Attribute)
-import Svg exposing (circle, ellipse, line, svg, rect)
-import Svg.Attributes exposing (..)
-
 type alias Puzzle =
   { id : Int
   , image : ImageType
