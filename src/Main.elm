@@ -172,7 +172,8 @@ viewPuzzle puzzle =
               [ width 40
               , height 40
               , viewBox "0 0 40 40"
-              , style "stroke" "currentColor"
+              , style "stroke" "#CCCCCC"
+              , style "stroke-width" "2"
               , style "transition" "transform 0.5s"
               , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
               ]
@@ -183,7 +184,8 @@ viewPuzzle puzzle =
               [ width 120
               , height 40
               , viewBox "0 0 120 40"
-              , style "stroke" "currentColor"
+              , style "stroke" "#CCCCCC"
+              , style "stroke-width" "2"
               , style "transition" "transform 0.5s"
               , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
               ]
@@ -196,7 +198,8 @@ viewPuzzle puzzle =
               [ width 80
               , height 80
               , viewBox "0 0 80 80"
-              , style "stroke" "currentColor"
+              , style "stroke" "#CCCCCC"
+              , style "stroke-width" "2"
               , style "transition" "transform 0.5s"
               , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
               ]
@@ -210,7 +213,8 @@ viewPuzzle puzzle =
               [ width 160
               , height 40
               , viewBox "0 0 160 40"
-              , style "stroke" "currentColor"
+              , style "stroke" "#CCCCCC"
+              , style "stroke-width" "2"
               , style "transition" "transform 0.5s"
               , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
               ]
@@ -224,7 +228,8 @@ viewPuzzle puzzle =
               [ width 80
               , height 120
               , viewBox "0 0 80 120"
-              , style "stroke" "currentColor"
+              , style "stroke" "#CCCCCC"
+              , style "stroke-width" "2"
               , style "transition" "transform 0.5s"
               , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
               ]
@@ -238,7 +243,8 @@ viewPuzzle puzzle =
               [ width 80
               , height 120
               , viewBox "0 0 80 120"
-              , style "stroke" "currentColor"
+              , style "stroke" "#CCCCCC"
+              , style "stroke-width" "2"
               , style "transition" "transform 0.5s"
               , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
               ]

@@ -69,7 +69,6 @@ h1.title {
     justify-content: space-around;
     align-items: center;
     margin: 20px;
-    z-index: 1;
 }
 
 .gridArea {
@@ -81,7 +80,6 @@ h1.title {
     align-items: center;
     justify-content: center;
     margin: 20px;
-    z-index: 1;
 }
 
 .square {
@@ -94,15 +92,8 @@ h1.title {
 }
 
 .pop-up-window {
-    width: 400px;
-    height: 200px;
     font-size: 48px;
-    border: 1px solid black;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
+    color:tomato;
+    font-family: 'Chalkduster';
     position: absolute;
-    z-index: 2;
 }

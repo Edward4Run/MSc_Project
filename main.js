@@ -6412,7 +6412,8 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 									$elm$html$Html$Attributes$width(40),
 									$elm$html$Html$Attributes$height(40),
 									$elm$svg$Svg$Attributes$viewBox('0 0 40 40'),
-									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
+									A2($elm$html$Html$Attributes$style, 'stroke', '#CCCCCC'),
+									A2($elm$html$Html$Attributes$style, 'stroke-width', '2'),
 									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
 									A2(
 									$elm$html$Html$Attributes$style,
@@ -6440,7 +6441,8 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 									$elm$html$Html$Attributes$width(120),
 									$elm$html$Html$Attributes$height(40),
 									$elm$svg$Svg$Attributes$viewBox('0 0 120 40'),
-									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
+									A2($elm$html$Html$Attributes$style, 'stroke', '#CCCCCC'),
+									A2($elm$html$Html$Attributes$style, 'stroke-width', '2'),
 									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
 									A2(
 									$elm$html$Html$Attributes$style,
@@ -6488,7 +6490,8 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 									$elm$html$Html$Attributes$width(80),
 									$elm$html$Html$Attributes$height(80),
 									$elm$svg$Svg$Attributes$viewBox('0 0 80 80'),
-									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
+									A2($elm$html$Html$Attributes$style, 'stroke', '#CCCCCC'),
+									A2($elm$html$Html$Attributes$style, 'stroke-width', '2'),
 									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
 									A2(
 									$elm$html$Html$Attributes$style,
@@ -6546,7 +6549,8 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 									$elm$html$Html$Attributes$width(160),
 									$elm$html$Html$Attributes$height(40),
 									$elm$svg$Svg$Attributes$viewBox('0 0 160 40'),
-									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
+									A2($elm$html$Html$Attributes$style, 'stroke', '#CCCCCC'),
+									A2($elm$html$Html$Attributes$style, 'stroke-width', '2'),
 									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
 									A2(
 									$elm$html$Html$Attributes$style,
@@ -6604,7 +6608,8 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 									$elm$html$Html$Attributes$width(80),
 									$elm$html$Html$Attributes$height(120),
 									$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
-									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
+									A2($elm$html$Html$Attributes$style, 'stroke', '#CCCCCC'),
+									A2($elm$html$Html$Attributes$style, 'stroke-width', '2'),
 									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
 									A2(
 									$elm$html$Html$Attributes$style,
@@ -6662,7 +6667,8 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 									$elm$html$Html$Attributes$width(80),
 									$elm$html$Html$Attributes$height(120),
 									$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
-									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
+									A2($elm$html$Html$Attributes$style, 'stroke', '#CCCCCC'),
+									A2($elm$html$Html$Attributes$style, 'stroke-width', '2'),
 									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
 									A2(
 									$elm$html$Html$Attributes$style,
