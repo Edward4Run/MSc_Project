@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, h1, text, span)
+import Html exposing (Html, div, h1, text, span, p)
 import Html.Attributes exposing (width, height, class, style)
 import Html.Events exposing (onClick)
 import Svg exposing (svg, rect)
@@ -120,38 +120,40 @@ subscriptions model =
 -- VIEW
 view : Model -> Html Msg
 view model =
-  case model.gs.status of
-    HomePage ->
-      viewHomePage
-    Playing ->
-      viewPlayArea model.gs
-    Won ->
-      viewPlayArea model.gs
-
-
--- Homepage View
-viewHomePage : Html Msg
-viewHomePage = 
   div [ class "background" ]
-      [ div [ class "menu" ]
-            [ h1 [ class "title" ] [ text "Tangram" ]
-            , div [ class "buttons" ]
-                  [ menuButton Play "PLAY"
-                  , menuButton Exit "EXIT" ] ]
-      ]
+    (case model.gs.status of
+      HomePage ->
+        [ div [ class "menu" ]
+              [ h1 [ class "title" ] [ text "Tangram" ]
+              , div [ class "buttons" ]
+                    [ menuButton Play "PLAY"
+                    , menuButton Exit "EXIT" ] ] ]
+      Playing ->
+        [ puzzleArea model.gs
+        , gridArea model.gs
+        , div [ class "buttons" ]
+              [ menuButton Restart "Restart"
+              , menuButton Exit "EXIT" ] ]
+      Won ->
+        [ puzzleArea model.gs
+        , gridArea model.gs
+        , gameMessage
+        , div [ class "buttons" ]
+              [ menuButton Restart "Restart"
+              , menuButton Next "Next"
+              , menuButton Exit "EXIT" ] ]
+    )
 
+-- View: BUTTON
+menuButton : Msg -> String -> Html Msg
+menuButton clickMsg content =
+  div
+    [ class "menu-button"
+    , onClick clickMsg
+    ]
+    [ text content ]
 
--- PlayArea View
-viewPlayArea : GameState -> Html Msg
-viewPlayArea gs =
-  div [ class "background" ]
-      [ puzzleArea gs
-      , gridArea gs 
-      , div [ class "buttons" ]
-            [ gameButton Restart "Restart"
-            , gameButton Next "Next"
-            , gameButton Exit "EXIT" ] ]
-
+-- View: PlayArea
 puzzleArea : GameState -> Html Msg
 puzzleArea gs =
   div ([ class "puzzleArea" ]
@@ -165,6 +167,17 @@ viewPuzzle puzzle =
       [ case puzzle.image of
           One ->
             svg
+              [ width 40
+              , height 40
+              , viewBox "0 0 40 40"
+              , style "stroke" "currentColor"
+              , style "transition" "transform 0.5s"
+              , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
+              ]
+              [ rect [ x "0", y "0", width 40, height 40 ] []
+              ]
+          Three ->
+            svg
               [ width 120
               , height 40
               , viewBox "0 0 120 40"
@@ -175,20 +188,6 @@ viewPuzzle puzzle =
               [ rect [ x "0", y "0", width 40, height 40 ] []
               , rect [ x "40", y "0", width 40, height 40 ] []
               , rect [ x "80", y "0", width 40, height 40 ] []
-              ]
-          Seven ->
-            svg
-              [ width 80
-              , height 120
-              , viewBox "0 0 80 120"
-              , style "stroke" "currentColor"
-              , style "transition" "transform 0.5s"
-              , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
-              ]
-              [ rect [ x "0", y "0", width 40, height 40 ] []
-              , rect [ x "40", y "0", width 40, height 40 ] []
-              , rect [ x "0", y "40", width 40, height 40 ] []
-              , rect [ x "0", y "80", width 40, height 40 ] []
               ]
           Four ->
             svg
@@ -218,6 +217,20 @@ viewPuzzle puzzle =
               , rect [ x "80", y "0", width 40, height 40 ] []
               , rect [ x "120", y "0", width 40, height 40 ] []
               ]
+          Seven ->
+            svg
+              [ width 80
+              , height 120
+              , viewBox "0 0 80 120"
+              , style "stroke" "currentColor"
+              , style "transition" "transform 0.5s"
+              , style "transform" ("rotate(" ++ String.fromInt puzzle.rotation ++ "deg)")
+              ]
+              [ rect [ x "0", y "0", width 40, height 40 ] []
+              , rect [ x "40", y "0", width 40, height 40 ] []
+              , rect [ x "0", y "40", width 40, height 40 ] []
+              , rect [ x "0", y "80", width 40, height 40 ] []
+              ]
           Six ->
             svg
               [ width 80
@@ -236,6 +249,8 @@ viewPuzzle puzzle =
               ]
       ]
 
+
+-- View: GridArea
 gridArea : GameState -> Html Msg
 gridArea gs = 
   div [ class "gridArea" ]
@@ -273,20 +288,8 @@ container : List (Html Msg) -> Html Msg
 container =
   div [ ]
 
-
--- BUTTONS
-menuButton : Msg -> String -> Html Msg
-menuButton clickMsg content =
-  div
-    [ class "menu-button"
-    , onClick clickMsg
-    ]
-    [ text content ]
-
-gameButton : Msg -> String -> Html Msg
-gameButton clickMsg content =
-  div
-    [ class "game-button"
-    , onClick clickMsg
-    ]
-    [ text content ]
+-- View: Pop-Up Window
+gameMessage : Html Msg
+gameMessage =
+  div [ class ("pop-up-window") ]
+      [ p [] [ text "You Won!" ] ]

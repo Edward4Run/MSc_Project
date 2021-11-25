@@ -10,9 +10,10 @@ type alias Puzzle =
 
 type ImageType
   = One
-  | Seven
+  | Three
   | Four
   | FourInLine
+  | Seven
   | Six
 
 type alias Shape =

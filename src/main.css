@@ -41,18 +41,6 @@ h1.title {
     line-height: 50px;
 }
 
-.game-button {
-    width: 200px;
-    height: 50px;
-    font-size: 24px;
-    font-family: 'Chalkduster';
-    margin-top: 30px;
-    cursor: pointer;
-    border-radius: 10px;
-    border: 1px solid black;
-    line-height: 50px;
-}
-
 .buttons {
     display: flex;
     flex-direction: column;

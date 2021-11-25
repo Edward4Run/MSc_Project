@@ -28,5 +28,3 @@ genarateIndexedSquare width height =
                     :: result
             )
             []
-
-

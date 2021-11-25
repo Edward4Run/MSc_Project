@@ -2,6 +2,10 @@ module Game.GameRoute exposing (..)
 
 import Game.Levels.Level1 as Level1 exposing (..)
 import Game.Levels.Level2 as Level2 exposing (..)
+import Game.Levels.Level3 as Level3 exposing (..)
+import Game.Levels.Level4 as Level4 exposing (..)
+import Game.Levels.Level5 as Level5 exposing (..)
+--import Game.Levels.Level6 as Level6 exposing (..)
 import Grid exposing (Grid, Square)
 import Puzzles exposing (Puzzle, Position)
 import Dict
@@ -25,17 +29,35 @@ generateLevelGrid level =
         1 ->
             Level1.generateGrid
 
-        _ ->
+        2 ->
             Level2.generateGrid
+
+        3 ->
+            Level3.generateGrid
+
+        4 ->
+            Level4.generateGrid
+
+        _ ->
+            Level5.generateGrid
 
 generateLevelPuzzles : Int -> List Puzzle
 generateLevelPuzzles level =
     case level of
         1 ->
             Level1.generatePuzzles
+
+        2 ->
+            Level2.generatePuzzles
+
+        3 ->
+            Level3.generatePuzzles
+
+        4 ->
+            Level4.generatePuzzles
         
         _ ->
-            Level2.generatePuzzles
+            Level5.generatePuzzles
 
 updateLevelGameStatus : Int -> Position -> GameState -> GameState
 updateLevelGameStatus id position gs =
@@ -47,7 +69,7 @@ updateLevelGameStatus id position gs =
                 |> Dict.get id
     in
     { level = gs.level
-    , status = if gs.grid.count /= ( gs.grid.width * gs.grid.height ) then gs.status else Won
+    , status = if gs.grid.count == ( gs.grid.width * gs.grid.height ) then gs.status else Won
     , puzzles = updatePuzzles id position gs.puzzles
     , grid = { squares = updateSquares dragpuzzle position gs
             , width = gs.grid.width

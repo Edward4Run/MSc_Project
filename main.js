@@ -5444,21 +5444,46 @@ var $author$project$Grid$genarateIndexedSquare = F2(
 	});
 var $author$project$Game$Levels$Level1$generateGrid = {
 	count: 0,
+	height: 1,
+	squares: A2($author$project$Grid$genarateIndexedSquare, 1, 1),
+	width: 1
+};
+var $author$project$Game$Levels$Level2$generateGrid = {
+	count: 0,
 	height: 3,
 	squares: A2($author$project$Grid$genarateIndexedSquare, 1, 3),
 	width: 1
 };
-var $author$project$Game$Levels$Level2$generateGrid = {
+var $author$project$Game$Levels$Level3$generateGrid = {
+	count: 0,
+	height: 2,
+	squares: A2($author$project$Grid$genarateIndexedSquare, 4, 2),
+	width: 4
+};
+var $author$project$Game$Levels$Level4$generateGrid = {
+	count: 0,
+	height: 2,
+	squares: A2($author$project$Grid$genarateIndexedSquare, 4, 2),
+	width: 4
+};
+var $author$project$Game$Levels$Level5$generateGrid = {
 	count: 0,
 	height: 4,
 	squares: A2($author$project$Grid$genarateIndexedSquare, 2, 4),
 	width: 2
 };
 var $author$project$Game$GameRoute$generateLevelGrid = function (level) {
-	if (level === 1) {
-		return $author$project$Game$Levels$Level1$generateGrid;
-	} else {
-		return $author$project$Game$Levels$Level2$generateGrid;
+	switch (level) {
+		case 1:
+			return $author$project$Game$Levels$Level1$generateGrid;
+		case 2:
+			return $author$project$Game$Levels$Level2$generateGrid;
+		case 3:
+			return $author$project$Game$Levels$Level3$generateGrid;
+		case 4:
+			return $author$project$Game$Levels$Level4$generateGrid;
+		default:
+			return $author$project$Game$Levels$Level5$generateGrid;
 	}
 };
 var $author$project$Puzzles$One = {$: 'One'};
@@ -5472,11 +5497,63 @@ var $author$project$Game$Levels$Level1$generatePuzzles = _List_fromArray(
 		image: $author$project$Puzzles$One,
 		position: {x: -1, y: -1},
 		rotation: 0,
+		shape: {down: 0, left: 0, right: 0, up: 0}
+	}
+	]);
+var $author$project$Puzzles$Three = {$: 'Three'};
+var $author$project$Game$Levels$Level2$generatePuzzles = _List_fromArray(
+	[
+		{
+		id: 1,
+		image: $author$project$Puzzles$Three,
+		position: {x: -1, y: -1},
+		rotation: 0,
 		shape: {down: 0, left: 1, right: 1, up: 0}
 	}
 	]);
 var $author$project$Puzzles$Seven = {$: 'Seven'};
-var $author$project$Game$Levels$Level2$generatePuzzles = _List_fromArray(
+var $author$project$Game$Levels$Level3$generatePuzzles = _List_fromArray(
+	[
+		{
+		id: 1,
+		image: $author$project$Puzzles$Seven,
+		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 2, left: 0, right: 1, up: 0}
+	},
+		{
+		id: 2,
+		image: $author$project$Puzzles$Seven,
+		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 2, left: 0, right: 1, up: 0}
+	}
+	]);
+var $author$project$Game$Levels$Level4$generatePuzzles = _List_fromArray(
+	[
+		{
+		id: 1,
+		image: $author$project$Puzzles$One,
+		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 0, left: 0, right: 0, up: 0}
+	},
+		{
+		id: 2,
+		image: $author$project$Puzzles$Three,
+		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 0, left: 1, right: 1, up: 0}
+	},
+		{
+		id: 3,
+		image: $author$project$Puzzles$Seven,
+		position: {x: -1, y: -1},
+		rotation: 0,
+		shape: {down: 2, left: 0, right: 1, up: 0}
+	}
+	]);
+var $author$project$Game$Levels$Level5$generatePuzzles = _List_fromArray(
 	[
 		{
 		id: 1,
@@ -5494,10 +5571,17 @@ var $author$project$Game$Levels$Level2$generatePuzzles = _List_fromArray(
 	}
 	]);
 var $author$project$Game$GameRoute$generateLevelPuzzles = function (level) {
-	if (level === 1) {
-		return $author$project$Game$Levels$Level1$generatePuzzles;
-	} else {
-		return $author$project$Game$Levels$Level2$generatePuzzles;
+	switch (level) {
+		case 1:
+			return $author$project$Game$Levels$Level1$generatePuzzles;
+		case 2:
+			return $author$project$Game$Levels$Level2$generatePuzzles;
+		case 3:
+			return $author$project$Game$Levels$Level3$generatePuzzles;
+		case 4:
+			return $author$project$Game$Levels$Level4$generatePuzzles;
+		default:
+			return $author$project$Game$Levels$Level5$generatePuzzles;
 	}
 };
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$NotDragging = {$: 'NotDragging'};
@@ -5881,7 +5965,7 @@ var $author$project$Game$GameRoute$updateLevelGameStatus = F3(
 			},
 			level: gs.level,
 			puzzles: A3($author$project$Game$GameRoute$updatePuzzles, id, position, gs.puzzles),
-			status: (!_Utils_eq(gs.grid.count, gs.grid.width * gs.grid.height)) ? gs.status : $author$project$Game$GameRoute$Won
+			status: _Utils_eq(gs.grid.count, gs.grid.width * gs.grid.height) ? gs.status : $author$project$Game$GameRoute$Won
 		};
 	});
 var $author$project$Main$updateRotation = F2(
@@ -5986,7 +6070,9 @@ var $author$project$Main$update = F2(
 		}
 	});
 var $author$project$Main$Exit = {$: 'Exit'};
+var $author$project$Main$Next = {$: 'Next'};
 var $author$project$Main$Play = {$: 'Play'};
+var $author$project$Main$Restart = {$: 'Restart'};
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5997,95 +6083,25 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
+var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Main$menuButton = F2(
-	function (clickMsg, content) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('menu-button'),
-					$elm$html$Html$Events$onClick(clickMsg)
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(content)
-				]));
-	});
-var $author$project$Main$viewHomePage = A2(
+var $author$project$Main$gameMessage = A2(
 	$elm$html$Html$div,
 	_List_fromArray(
 		[
-			$elm$html$Html$Attributes$class('background')
+			$elm$html$Html$Attributes$class('pop-up-window')
 		]),
 	_List_fromArray(
 		[
 			A2(
-			$elm$html$Html$div,
+			$elm$html$Html$p,
+			_List_Nil,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class('menu')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$h1,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('title')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Tangram')
-						])),
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('buttons')
-						]),
-					_List_fromArray(
-						[
-							A2($author$project$Main$menuButton, $author$project$Main$Play, 'PLAY'),
-							A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
-						]))
+					$elm$html$Html$text('You Won!')
 				]))
 		]));
-var $author$project$Main$Next = {$: 'Next'};
-var $author$project$Main$Restart = {$: 'Restart'};
-var $author$project$Main$gameButton = F2(
-	function (clickMsg, content) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('game-button'),
-					$elm$html$Html$Events$onClick(clickMsg)
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(content)
-				]));
-	});
 var $author$project$Main$container = $elm$html$Html$div(_List_Nil);
 var $author$project$Main$DragDropMsg = function (a) {
 	return {$: 'DragDropMsg', a: a};
@@ -6112,6 +6128,7 @@ var $elm$core$Basics$composeL = F3(
 var $elm$virtual_dom$VirtualDom$Custom = function (a) {
 	return {$: 'Custom', a: a};
 };
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$custom = F2(
 	function (event, decoder) {
 		return A2(
@@ -6284,6 +6301,37 @@ var $author$project$Main$gridArea = function (gs) {
 						gs.grid.squares)))
 			]));
 };
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $author$project$Main$menuButton = F2(
+	function (clickMsg, content) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('menu-button'),
+					$elm$html$Html$Events$onClick(clickMsg)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(content)
+				]));
+	});
 var $author$project$Main$RotateImage = function (a) {
 	return {$: 'RotateImage', a: a};
 };
@@ -6363,6 +6411,34 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 							$elm$svg$Svg$svg,
 							_List_fromArray(
 								[
+									$elm$html$Html$Attributes$width(40),
+									$elm$html$Html$Attributes$height(40),
+									$elm$svg$Svg$Attributes$viewBox('0 0 40 40'),
+									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
+									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
+									A2(
+									$elm$html$Html$Attributes$style,
+									'transform',
+									'rotate(' + ($elm$core$String$fromInt(puzzle.rotation) + 'deg)'))
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$html$Html$Attributes$width(40),
+											$elm$html$Html$Attributes$height(40)
+										]),
+									_List_Nil)
+								]));
+					case 'Three':
+						return A2(
+							$elm$svg$Svg$svg,
+							_List_fromArray(
+								[
 									$elm$html$Html$Attributes$width(120),
 									$elm$html$Html$Attributes$height(40),
 									$elm$svg$Svg$Attributes$viewBox('0 0 120 40'),
@@ -6401,64 +6477,6 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 										[
 											$elm$svg$Svg$Attributes$x('80'),
 											$elm$svg$Svg$Attributes$y('0'),
-											$elm$html$Html$Attributes$width(40),
-											$elm$html$Html$Attributes$height(40)
-										]),
-									_List_Nil)
-								]));
-					case 'Seven':
-						return A2(
-							$elm$svg$Svg$svg,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$width(80),
-									$elm$html$Html$Attributes$height(120),
-									$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
-									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
-									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
-									A2(
-									$elm$html$Html$Attributes$style,
-									'transform',
-									'rotate(' + ($elm$core$String$fromInt(puzzle.rotation) + 'deg)'))
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$svg$Svg$rect,
-									_List_fromArray(
-										[
-											$elm$svg$Svg$Attributes$x('0'),
-											$elm$svg$Svg$Attributes$y('0'),
-											$elm$html$Html$Attributes$width(40),
-											$elm$html$Html$Attributes$height(40)
-										]),
-									_List_Nil),
-									A2(
-									$elm$svg$Svg$rect,
-									_List_fromArray(
-										[
-											$elm$svg$Svg$Attributes$x('40'),
-											$elm$svg$Svg$Attributes$y('0'),
-											$elm$html$Html$Attributes$width(40),
-											$elm$html$Html$Attributes$height(40)
-										]),
-									_List_Nil),
-									A2(
-									$elm$svg$Svg$rect,
-									_List_fromArray(
-										[
-											$elm$svg$Svg$Attributes$x('0'),
-											$elm$svg$Svg$Attributes$y('40'),
-											$elm$html$Html$Attributes$width(40),
-											$elm$html$Html$Attributes$height(40)
-										]),
-									_List_Nil),
-									A2(
-									$elm$svg$Svg$rect,
-									_List_fromArray(
-										[
-											$elm$svg$Svg$Attributes$x('0'),
-											$elm$svg$Svg$Attributes$y('80'),
 											$elm$html$Html$Attributes$width(40),
 											$elm$html$Html$Attributes$height(40)
 										]),
@@ -6580,6 +6598,64 @@ var $author$project$Main$viewPuzzle = function (puzzle) {
 										]),
 									_List_Nil)
 								]));
+					case 'Seven':
+						return A2(
+							$elm$svg$Svg$svg,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$width(80),
+									$elm$html$Html$Attributes$height(120),
+									$elm$svg$Svg$Attributes$viewBox('0 0 80 120'),
+									A2($elm$html$Html$Attributes$style, 'stroke', 'currentColor'),
+									A2($elm$html$Html$Attributes$style, 'transition', 'transform 0.5s'),
+									A2(
+									$elm$html$Html$Attributes$style,
+									'transform',
+									'rotate(' + ($elm$core$String$fromInt(puzzle.rotation) + 'deg)'))
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$html$Html$Attributes$width(40),
+											$elm$html$Html$Attributes$height(40)
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('40'),
+											$elm$svg$Svg$Attributes$y('0'),
+											$elm$html$Html$Attributes$width(40),
+											$elm$html$Html$Attributes$height(40)
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('40'),
+											$elm$html$Html$Attributes$width(40),
+											$elm$html$Html$Attributes$height(40)
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$rect,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x('0'),
+											$elm$svg$Svg$Attributes$y('80'),
+											$elm$html$Html$Attributes$width(40),
+											$elm$html$Html$Attributes$height(40)
+										]),
+									_List_Nil)
+								]));
 					default:
 						return A2(
 							$elm$svg$Svg$svg,
@@ -6676,41 +6752,88 @@ var $author$project$Main$puzzleArea = function (gs) {
 				{x: -1, y: -1})),
 		A2($elm$core$List$map, $author$project$Main$viewPuzzle, gs.puzzles));
 };
-var $author$project$Main$viewPlayArea = function (gs) {
+var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
 				$elm$html$Html$Attributes$class('background')
 			]),
-		_List_fromArray(
-			[
-				$author$project$Main$puzzleArea(gs),
-				$author$project$Main$gridArea(gs),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('buttons')
-					]),
-				_List_fromArray(
-					[
-						A2($author$project$Main$gameButton, $author$project$Main$Restart, 'Restart'),
-						A2($author$project$Main$gameButton, $author$project$Main$Next, 'Next'),
-						A2($author$project$Main$gameButton, $author$project$Main$Exit, 'EXIT')
-					]))
-			]));
-};
-var $author$project$Main$view = function (model) {
-	var _v0 = model.gs.status;
-	switch (_v0.$) {
-		case 'HomePage':
-			return $author$project$Main$viewHomePage;
-		case 'Playing':
-			return $author$project$Main$viewPlayArea(model.gs);
-		default:
-			return $author$project$Main$viewPlayArea(model.gs);
-	}
+		function () {
+			var _v0 = model.gs.status;
+			switch (_v0.$) {
+				case 'HomePage':
+					return _List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('menu')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$h1,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('title')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('Tangram')
+										])),
+									A2(
+									$elm$html$Html$div,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('buttons')
+										]),
+									_List_fromArray(
+										[
+											A2($author$project$Main$menuButton, $author$project$Main$Play, 'PLAY'),
+											A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
+										]))
+								]))
+						]);
+				case 'Playing':
+					return _List_fromArray(
+						[
+							$author$project$Main$puzzleArea(model.gs),
+							$author$project$Main$gridArea(model.gs),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('buttons')
+								]),
+							_List_fromArray(
+								[
+									A2($author$project$Main$menuButton, $author$project$Main$Restart, 'Restart'),
+									A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
+								]))
+						]);
+				default:
+					return _List_fromArray(
+						[
+							$author$project$Main$puzzleArea(model.gs),
+							$author$project$Main$gridArea(model.gs),
+							$author$project$Main$gameMessage,
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('buttons')
+								]),
+							_List_fromArray(
+								[
+									A2($author$project$Main$menuButton, $author$project$Main$Restart, 'Restart'),
+									A2($author$project$Main$menuButton, $author$project$Main$Next, 'Next'),
+									A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
+								]))
+						]);
+			}
+		}());
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
