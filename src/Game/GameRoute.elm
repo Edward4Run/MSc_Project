@@ -62,21 +62,38 @@ generateLevelPuzzles level =
 updateLevelGameStatus : Int -> Position -> GameState -> GameState
 updateLevelGameStatus id position gs =
     let
-        dragpuzzle =
-            gs.puzzles
-                |> List.map (\item -> (item.id, item))
-                |> Dict.fromList
-                |> Dict.get id
+        newgrid =
+            let
+                dragpuzzle =
+                    gs.puzzles
+                        |> List.map (\item -> (item.id, item))
+                        |> Dict.fromList
+                        |> Dict.get id
+            in
+            { squares = updateSquares dragpuzzle position gs.grid
+            , width = gs.grid.width
+            , height = gs.grid.height }
     in
     { level = gs.level
-    , status = if gs.grid.count == ( gs.grid.width * gs.grid.height ) then gs.status else Won
+    , status = checkStatus newgrid
     , puzzles = updatePuzzles id position gs.puzzles
-    , grid = { squares = updateSquares dragpuzzle position gs
-            , width = gs.grid.width
-            , height = gs.grid.height
-            , count = countCovered gs.grid }
+    , grid = newgrid
     }
 
+
+checkStatus : Grid -> Status
+checkStatus grid =
+    let
+        count =
+            grid.squares
+                |> List.concat
+                |> List.filter (\a -> a.isCovered == True )
+                |> List.length
+    in
+    if count == grid.width * grid.height then
+        Won
+    else
+        Playing
 
 updatePuzzles : Int -> Position -> List Puzzle -> List Puzzle
 updatePuzzles id position puzzles =
@@ -85,9 +102,9 @@ updatePuzzles id position puzzles =
     else
         puzzles
 
-updateSquares : Maybe Puzzle -> Position -> GameState -> List ( List Square )
-updateSquares dragpuzzle position gs =
-    gs.grid.squares
+updateSquares : Maybe Puzzle -> Position -> Grid -> List ( List Square )
+updateSquares dragpuzzle position grid =
+    grid.squares
         |> List.map 
             (List.map
               (\a ->
@@ -120,11 +137,3 @@ updateSquare square dragpuzzle position =
                 { isCovered = True, position = square.position }
             else
                 square
-
-
-countCovered : Grid -> Int
-countCovered grid =
-    grid.squares
-        |> List.concat
-        |> List.filter (\a -> a.isCovered == True )
-        |> List.length

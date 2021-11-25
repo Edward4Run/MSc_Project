@@ -5443,31 +5443,26 @@ var $author$project$Grid$genarateIndexedSquare = F2(
 			A2($elm$core$List$range, 0, height));
 	});
 var $author$project$Game$Levels$Level1$generateGrid = {
-	count: 0,
 	height: 1,
 	squares: A2($author$project$Grid$genarateIndexedSquare, 1, 1),
 	width: 1
 };
 var $author$project$Game$Levels$Level2$generateGrid = {
-	count: 0,
 	height: 3,
 	squares: A2($author$project$Grid$genarateIndexedSquare, 1, 3),
 	width: 1
 };
 var $author$project$Game$Levels$Level3$generateGrid = {
-	count: 0,
 	height: 2,
 	squares: A2($author$project$Grid$genarateIndexedSquare, 4, 2),
 	width: 4
 };
 var $author$project$Game$Levels$Level4$generateGrid = {
-	count: 0,
 	height: 2,
 	squares: A2($author$project$Grid$genarateIndexedSquare, 4, 2),
 	width: 4
 };
 var $author$project$Game$Levels$Level5$generateGrid = {
-	count: 0,
 	height: 4,
 	squares: A2($author$project$Grid$genarateIndexedSquare, 2, 4),
 	width: 2
@@ -5751,14 +5746,15 @@ var $elm$core$List$filter = F2(
 			_List_Nil,
 			list);
 	});
-var $author$project$Game$GameRoute$countCovered = function (grid) {
-	return $elm$core$List$length(
+var $author$project$Game$GameRoute$checkStatus = function (grid) {
+	var count = $elm$core$List$length(
 		A2(
 			$elm$core$List$filter,
 			function (a) {
 				return a.isCovered;
 			},
 			$elm$core$List$concat(grid.squares)));
+	return _Utils_eq(count, grid.width * grid.height) ? $author$project$Game$GameRoute$Won : $author$project$Game$GameRoute$Playing;
 };
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
@@ -5935,37 +5931,39 @@ var $author$project$Game$GameRoute$updateSquare = F3(
 		}
 	});
 var $author$project$Game$GameRoute$updateSquares = F3(
-	function (dragpuzzle, position, gs) {
+	function (dragpuzzle, position, grid) {
 		return A2(
 			$elm$core$List$map,
 			$elm$core$List$map(
 				function (a) {
 					return A3($author$project$Game$GameRoute$updateSquare, a, dragpuzzle, position);
 				}),
-			gs.grid.squares);
+			grid.squares);
 	});
 var $author$project$Game$GameRoute$updateLevelGameStatus = F3(
 	function (id, position, gs) {
-		var dragpuzzle = A2(
-			$elm$core$Dict$get,
-			id,
-			$elm$core$Dict$fromList(
-				A2(
-					$elm$core$List$map,
-					function (item) {
-						return _Utils_Tuple2(item.id, item);
-					},
-					gs.puzzles)));
-		return {
-			grid: {
-				count: $author$project$Game$GameRoute$countCovered(gs.grid),
+		var newgrid = function () {
+			var dragpuzzle = A2(
+				$elm$core$Dict$get,
+				id,
+				$elm$core$Dict$fromList(
+					A2(
+						$elm$core$List$map,
+						function (item) {
+							return _Utils_Tuple2(item.id, item);
+						},
+						gs.puzzles)));
+			return {
 				height: gs.grid.height,
-				squares: A3($author$project$Game$GameRoute$updateSquares, dragpuzzle, position, gs),
+				squares: A3($author$project$Game$GameRoute$updateSquares, dragpuzzle, position, gs.grid),
 				width: gs.grid.width
-			},
+			};
+		}();
+		return {
+			grid: newgrid,
 			level: gs.level,
 			puzzles: A3($author$project$Game$GameRoute$updatePuzzles, id, position, gs.puzzles),
-			status: _Utils_eq(gs.grid.count, gs.grid.width * gs.grid.height) ? gs.status : $author$project$Game$GameRoute$Won
+			status: $author$project$Game$GameRoute$checkStatus(newgrid)
 		};
 	});
 var $author$project$Main$updateRotation = F2(
@@ -6083,9 +6081,40 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Main$button = F2(
+	function (clickMsg, content) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('button'),
+					$elm$html$Html$Events$onClick(clickMsg)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(content)
+				]));
+	});
+var $elm$html$Html$p = _VirtualDom_node('p');
 var $author$project$Main$gameMessage = A2(
 	$elm$html$Html$div,
 	_List_fromArray(
@@ -6128,7 +6157,6 @@ var $elm$core$Basics$composeL = F3(
 var $elm$virtual_dom$VirtualDom$Custom = function (a) {
 	return {$: 'Custom', a: a};
 };
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$custom = F2(
 	function (event, decoder) {
 		return A2(
@@ -6302,36 +6330,6 @@ var $author$project$Main$gridArea = function (gs) {
 			]));
 };
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
-var $author$project$Main$menuButton = F2(
-	function (clickMsg, content) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('menu-button'),
-					$elm$html$Html$Events$onClick(clickMsg)
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(content)
-				]));
-	});
 var $author$project$Main$RotateImage = function (a) {
 	return {$: 'RotateImage', a: a};
 };
@@ -6757,7 +6755,7 @@ var $author$project$Main$view = function (model) {
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('background')
+				$elm$html$Html$Attributes$class('container')
 			]),
 		function () {
 			var _v0 = model.gs.status;
@@ -6787,49 +6785,67 @@ var $author$project$Main$view = function (model) {
 									$elm$html$Html$div,
 									_List_fromArray(
 										[
-											$elm$html$Html$Attributes$class('buttons')
+											$elm$html$Html$Attributes$class('menu-buttons')
 										]),
 									_List_fromArray(
 										[
-											A2($author$project$Main$menuButton, $author$project$Main$Play, 'PLAY'),
-											A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
+											A2($author$project$Main$button, $author$project$Main$Play, 'PLAY'),
+											A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
 										]))
 								]))
 						]);
 				case 'Playing':
 					return _List_fromArray(
 						[
-							$author$project$Main$puzzleArea(model.gs),
-							$author$project$Main$gridArea(model.gs),
 							A2(
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('buttons')
+									$elm$html$Html$Attributes$class('playArea')
 								]),
 							_List_fromArray(
 								[
-									A2($author$project$Main$menuButton, $author$project$Main$Restart, 'Restart'),
-									A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
+									$author$project$Main$puzzleArea(model.gs),
+									$author$project$Main$gridArea(model.gs)
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('play-buttons')
+								]),
+							_List_fromArray(
+								[
+									A2($author$project$Main$button, $author$project$Main$Restart, 'Restart'),
+									A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
 								]))
 						]);
 				default:
 					return _List_fromArray(
 						[
-							$author$project$Main$puzzleArea(model.gs),
-							$author$project$Main$gridArea(model.gs),
-							$author$project$Main$gameMessage,
 							A2(
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('buttons')
+									$elm$html$Html$Attributes$class('playArea')
 								]),
 							_List_fromArray(
 								[
-									A2($author$project$Main$menuButton, $author$project$Main$Restart, 'Restart'),
-									A2($author$project$Main$menuButton, $author$project$Main$Next, 'Next'),
-									A2($author$project$Main$menuButton, $author$project$Main$Exit, 'EXIT')
+									$author$project$Main$puzzleArea(model.gs),
+									$author$project$Main$gridArea(model.gs),
+									$author$project$Main$gameMessage
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('play-buttons')
+								]),
+							_List_fromArray(
+								[
+									A2($author$project$Main$button, $author$project$Main$Restart, 'Restart'),
+									A2($author$project$Main$button, $author$project$Main$Next, 'Next'),
+									A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
 								]))
 						]);
 			}

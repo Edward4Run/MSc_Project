@@ -7,7 +7,6 @@ type alias Grid =
     { squares : List ( List Square )
     , width : Int
     , height : Int
-    , count : Int
     }
 
 

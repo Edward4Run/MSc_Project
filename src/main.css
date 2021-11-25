@@ -1,14 +1,13 @@
 body {
-    background-color: #CCCCCC;
+    background: #CCCCCC;
 }
 
-.background {
-    overflow: auto;
+.container {
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 0;
 }
 
 .menu {
@@ -17,7 +16,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #C4C4C4;
+    background: #C4C4C4;
     border-radius: 10px;
     border: 1px solid black;
 }
@@ -28,24 +27,37 @@ h1.title {
     margin-top: 50px;
 }
 
-.menu-button {
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.play-buttons {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.button {
     width: 200px;
     height: 50px;
     font-size: 24px;
     font-family: 'Chalkduster';
-    background-color: #FFFFFF;
-    margin-top: 20px;
+    background: #FFFFFF;
+    margin: 20px;
     cursor: pointer;
     border-radius: 10px;
     border: 1px solid black;
     line-height: 50px;
 }
 
-.buttons {
+.playArea {
+    position: relative;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    text-align: center;
 }
 
 .puzzleArea {
@@ -57,17 +69,19 @@ h1.title {
     justify-content: space-around;
     align-items: center;
     margin: 20px;
+    z-index: 1;
 }
 
 .gridArea {
     width: 500px;
     height: 500px;
+    border: 1px solid black;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
-    border-radius: 10px;
     margin: 20px;
+    z-index: 1;
 }
 
 .square {
@@ -80,5 +94,15 @@ h1.title {
 }
 
 .pop-up-window {
-    z-index: 100;
+    width: 400px;
+    height: 200px;
+    font-size: 48px;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    position: absolute;
+    z-index: 2;
 }

@@ -120,35 +120,37 @@ subscriptions model =
 -- VIEW
 view : Model -> Html Msg
 view model =
-  div [ class "background" ]
+  div [ class "container" ]
     (case model.gs.status of
       HomePage ->
         [ div [ class "menu" ]
               [ h1 [ class "title" ] [ text "Tangram" ]
-              , div [ class "buttons" ]
-                    [ menuButton Play "PLAY"
-                    , menuButton Exit "EXIT" ] ] ]
+              , div [ class "menu-buttons" ]
+                    [ button Play "PLAY"
+                    , button Exit "EXIT" ] ] ]
       Playing ->
-        [ puzzleArea model.gs
-        , gridArea model.gs
-        , div [ class "buttons" ]
-              [ menuButton Restart "Restart"
-              , menuButton Exit "EXIT" ] ]
+        [ div [ class "playArea" ]
+              [ puzzleArea model.gs
+              , gridArea model.gs ]
+        , div [ class "play-buttons" ]
+              [ button Restart "Restart"
+              , button Exit "EXIT" ] ]
       Won ->
-        [ puzzleArea model.gs
-        , gridArea model.gs
-        , gameMessage
-        , div [ class "buttons" ]
-              [ menuButton Restart "Restart"
-              , menuButton Next "Next"
-              , menuButton Exit "EXIT" ] ]
+        [ div [ class "playArea" ]
+              [ puzzleArea model.gs
+              , gridArea model.gs
+              , gameMessage ]
+        , div [ class "play-buttons" ]
+              [ button Restart "Restart"
+              , button Next "Next"
+              , button Exit "EXIT" ] ]
     )
 
--- View: BUTTON
-menuButton : Msg -> String -> Html Msg
-menuButton clickMsg content =
+-- View: Button
+button : Msg -> String -> Html Msg
+button clickMsg content =
   div
-    [ class "menu-button"
+    [ class "button"
     , onClick clickMsg
     ]
     [ text content ]

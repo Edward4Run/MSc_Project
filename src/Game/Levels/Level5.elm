@@ -7,8 +7,7 @@ generateGrid : Grid
 generateGrid =
     { squares = Grid.genarateIndexedSquare 2 4
     , width = 2
-    , height = 4
-    , count = 0 }
+    , height = 4}
 
 generatePuzzles : List Puzzle
 generatePuzzles =
