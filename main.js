@@ -6807,6 +6807,26 @@ var $author$project$Main$view = function (model) {
 							$elm$html$Html$div,
 							_List_fromArray(
 								[
+									$elm$html$Html$Attributes$class('level')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$h1,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('title')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(
+											'Level: ' + $elm$core$String$fromInt(model.gs.level))
+										]))
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
 									$elm$html$Html$Attributes$class('playArea')
 								]),
 							_List_fromArray(
@@ -6829,6 +6849,26 @@ var $author$project$Main$view = function (model) {
 				default:
 					return _List_fromArray(
 						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('level')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$h1,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('title')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(
+											'Level: ' + $elm$core$String$fromInt(model.gs.level))
+										]))
+								])),
 							A2(
 							$elm$html$Html$div,
 							_List_fromArray(

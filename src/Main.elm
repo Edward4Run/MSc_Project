@@ -129,14 +129,18 @@ view model =
                     [ button Play "PLAY"
                     , button Exit "EXIT" ] ] ]
       Playing ->
-        [ div [ class "playArea" ]
+        [ div [ class "level"]
+              [ h1 [ class "title" ] [ text ("Level: " ++ String.fromInt(model.gs.level)) ] ]
+        , div [ class "playArea" ]
               [ puzzleArea model.gs
               , gridArea model.gs ]
         , div [ class "play-buttons" ]
               [ button Restart "Restart"
               , button Exit "EXIT" ] ]
       Won ->
-        [ div [ class "playArea" ]
+        [ div [ class "level"]
+              [ h1 [ class "title" ] [ text ("Level: " ++ String.fromInt(model.gs.level)) ] ]
+        , div [ class "playArea" ]
               [ puzzleArea model.gs
               , gridArea model.gs
               , gameMessage ]
