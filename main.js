@@ -5602,8 +5602,6 @@ var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
 var $author$project$Game$GameRoute$Playing = {$: 'Playing'};
-var $elm$core$Debug$log = _Debug_log;
-var $elm$core$Debug$toString = _Debug_toString;
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver = F4(
 	function (a, b, c, d) {
 		return {$: 'DraggedOver', a: a, b: b, c: c, d: d};
@@ -6045,26 +6043,23 @@ var $author$project$Main$update = F2(
 				var _v1 = A2($norpan$elm_html5_drag_drop$Html5$DragDrop$update, msg_, model.dragDrop);
 				var model_ = _v1.a;
 				var result = _v1.b;
-				return A2(
-					$elm$core$Debug$log,
-					$elm$core$Debug$toString(msg_),
-					_Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								dragDrop: model_,
-								gs: function () {
-									if (result.$ === 'Nothing') {
-										return model.gs;
-									} else {
-										var _v3 = result.a;
-										var id = _v3.a;
-										var position = _v3.b;
-										return A3($author$project$Game$GameRoute$updateLevelGameStatus, id, position, model.gs);
-									}
-								}()
-							}),
-						$elm$core$Platform$Cmd$none));
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							dragDrop: model_,
+							gs: function () {
+								if (result.$ === 'Nothing') {
+									return model.gs;
+								} else {
+									var _v3 = result.a;
+									var id = _v3.a;
+									var position = _v3.b;
+									return A3($author$project$Game$GameRoute$updateLevelGameStatus, id, position, model.gs);
+								}
+							}()
+						}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$Exit = {$: 'Exit'};

@@ -9,8 +9,7 @@ import Svg.Attributes exposing (viewBox, x, y)
 import Html5.DragDrop as DragDrop
 import Game.GameRoute as GameRoute exposing (GameState, Status(..))
 import Puzzles exposing (Puzzle, ImageType(..))
-import Grid exposing (Grid, Square)
-import Debug exposing (toString, log)
+import Grid exposing (Square)
 
 
 -- MAIN
@@ -47,8 +46,8 @@ type Msg
   | Exit
   | Next
   | Restart
-  | DragDropMsg (DragDrop.Msg Int Puzzles.Position)
   | RotateImage Int
+  | DragDropMsg (DragDrop.Msg Int Puzzles.Position)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -83,7 +82,7 @@ update msg model =
         ( model_, result ) =
             DragDrop.update msg_ model.dragDrop
       in 
-        log (toString msg_) ( { model
+      ( { model
             | dragDrop = model_
             , gs =
                 case result of
@@ -92,8 +91,7 @@ update msg model =
                   Just (id, position, _) ->
                     GameRoute.updateLevelGameStatus id position model.gs
           }
-        , Cmd.none
-        )
+        , Cmd.none)
 
 updateRotation : Puzzle -> Int -> Puzzle
 updateRotation puzzle id = 
