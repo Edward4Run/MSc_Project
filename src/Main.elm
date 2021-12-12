@@ -159,7 +159,9 @@ view model =
         , p [] [ text "Click the left mouse - Rotate puzzle" ]
         , p [] [ text "Press the left mouse - Drag puzzle" ]
         , p [] [ text "Note: Click on the middlemost square of the puzzle" ]
-        , p [] [ text "      Matching the puzzle to the grid strictly" ] ]
+        , p [] [ text "      Matching the puzzle to the grid strictly" ]
+        , div [ class "menu-buttons" ]
+                    [ button Exit "EXIT"] ]
     )
 
 -- View: Button

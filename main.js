@@ -6947,6 +6947,16 @@ var $author$project$Main$view = function (model) {
 							_List_fromArray(
 								[
 									$elm$html$Html$text('      Matching the puzzle to the grid strictly')
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('menu-buttons')
+								]),
+							_List_fromArray(
+								[
+									A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
 								]))
 						]);
 			}
