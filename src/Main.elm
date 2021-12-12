@@ -42,7 +42,8 @@ init _ = ( { gs = { level = 1
 
 -- UPDATE
 type Msg 
-  = Play 
+  = Play
+  | Toturial
   | Exit
   | Next
   | Restart
@@ -55,6 +56,11 @@ update msg model =
     Play ->
       ( { model | gs = { level = model.gs.level
                         , status = Playing
+                        , puzzles = model.gs.puzzles
+                        , grid = model.gs.grid } }, Cmd.none )
+    Toturial ->
+      ( { model | gs = { level = model.gs.level
+                        , status = Totur
                         , puzzles = model.gs.puzzles
                         , grid = model.gs.grid } }, Cmd.none )
     Exit ->
@@ -125,7 +131,8 @@ view model =
               [ h1 [ class "title" ] [ text "Tangram" ]
               , div [ class "menu-buttons" ]
                     [ button Play "PLAY"
-                    , button Exit "EXIT" ] ] ]
+                    , button Toturial "TOTURIAL" 
+                    , button Exit "EXIT"] ] ]
       Playing ->
         [ div [ class "level"]
               [ h1 [ class "title" ] [ text ("Level: " ++ String.fromInt(model.gs.level)) ] ]
@@ -146,6 +153,13 @@ view model =
               [ button Restart "Restart"
               , button Next "Next"
               , button Exit "EXIT" ] ]
+      Totur ->
+        [ h1 [ class "title" ] [ text "Toturial" ]
+        , p [] [ text "It is a Puzzle Game where the player has to fit puzzles of all different shapes and sizes into the play area."]
+        , p [] [ text "Click the left mouse - Rotate puzzle" ]
+        , p [] [ text "Press the left mouse - Drag puzzle" ]
+        , p [] [ text "Note: Click on the middlemost square of the puzzle" ]
+        , p [] [ text "      Matching the puzzle to the grid strictly" ] ]
     )
 
 -- View: Button

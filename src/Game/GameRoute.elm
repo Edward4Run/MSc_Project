@@ -22,6 +22,7 @@ type Status
     = HomePage
     | Playing
     | Won
+    | Totur
 
 generateLevelGrid : Int -> Grid
 generateLevelGrid level =

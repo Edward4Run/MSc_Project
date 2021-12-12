@@ -5602,6 +5602,7 @@ var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
 var $author$project$Game$GameRoute$Playing = {$: 'Playing'};
+var $author$project$Game$GameRoute$Totur = {$: 'Totur'};
 var $norpan$elm_html5_drag_drop$Html5$DragDrop$DraggedOver = F4(
 	function (a, b, c, d) {
 		return {$: 'DraggedOver', a: a, b: b, c: c, d: d};
@@ -5985,6 +5986,14 @@ var $author$project$Main$update = F2(
 							gs: {grid: model.gs.grid, level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Game$GameRoute$Playing}
 						}),
 					$elm$core$Platform$Cmd$none);
+			case 'Toturial':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							gs: {grid: model.gs.grid, level: model.gs.level, puzzles: model.gs.puzzles, status: $author$project$Game$GameRoute$Totur}
+						}),
+					$elm$core$Platform$Cmd$none);
 			case 'Exit':
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -6066,6 +6075,7 @@ var $author$project$Main$Exit = {$: 'Exit'};
 var $author$project$Main$Next = {$: 'Next'};
 var $author$project$Main$Play = {$: 'Play'};
 var $author$project$Main$Restart = {$: 'Restart'};
+var $author$project$Main$Toturial = {$: 'Toturial'};
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -6791,6 +6801,7 @@ var $author$project$Main$view = function (model) {
 									_List_fromArray(
 										[
 											A2($author$project$Main$button, $author$project$Main$Play, 'PLAY'),
+											A2($author$project$Main$button, $author$project$Main$Toturial, 'TOTURIAL'),
 											A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
 										]))
 								]))
@@ -6841,7 +6852,7 @@ var $author$project$Main$view = function (model) {
 									A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
 								]))
 						]);
-				default:
+				case 'Won':
 					return _List_fromArray(
 						[
 							A2(
@@ -6887,6 +6898,55 @@ var $author$project$Main$view = function (model) {
 									A2($author$project$Main$button, $author$project$Main$Restart, 'Restart'),
 									A2($author$project$Main$button, $author$project$Main$Next, 'Next'),
 									A2($author$project$Main$button, $author$project$Main$Exit, 'EXIT')
+								]))
+						]);
+				default:
+					return _List_fromArray(
+						[
+							A2(
+							$elm$html$Html$h1,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('title')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Toturial')
+								])),
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('It is a Puzzle Game where the player has to fit puzzles of all different shapes and sizes into the play area.')
+								])),
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Click the left mouse - Rotate puzzle')
+								])),
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Press the left mouse - Drag puzzle')
+								])),
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Note: Click on the middlemost square of the puzzle')
+								])),
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('      Matching the puzzle to the grid strictly')
 								]))
 						]);
 			}
