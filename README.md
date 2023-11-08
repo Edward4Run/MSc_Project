@@ -18,4 +18,4 @@
 - How is it scored?  
     Players can unlock a higher level after completing the current level.
 
-[Play it here!](https://edwardchennn.github.io/elm-tangram/)
+[Play it here!](https://jaffacakee.github.io/elm-tangram/)
